@@ -6,28 +6,24 @@
   <title>Document</title>
 </head>
 <body>
-  <script>
-    //步骤一:创建异步对象
-    var ajax = new XMLHttpRequest();
-    //步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
-    ajax.open('get','https://github.com/snjylin/task');
-    //步骤三:发送请求
-    ajax.send();
-    //步骤四:注册事件 onreadystatechange 状态改变就会调用
-    ajax.onreadystatechange = function () {
-     if (ajax.readyState==4 &&ajax.status==200) {
-      //步骤五 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-    // 　　　　console.log(ajax.responseText);//输入相应的内容
-
-        var aA = document.getElementsByTagName('a');
-        var arr = [];
-        for(var i = 0; i < aA.length; i++){
-          if(aA[i].href){
-            arr.push(aA[i].href);
-          }
-        }
-    　　}
-    }
-  </script>
+  <ul>
+    <li><a href="/view/QQ菜单练习.html">QQ菜单练习.html</a></li>
+    <li><a href="/view/SVG练习1.html">SVG练习1.html</a></li>
+    <li><a href="/view/SVG练习2.html">SVG练习2.html</a></li>
+    <li><a href="/view/SVG练习3.html">SVG练习3.html</a></li>
+    <li><a href="/view/SVG练习4.html">SVG练习4.html</a></li>
+    <li><a href="/view/SVG练习5.html">SVG练习5.html</a></li>
+    <li><a href="/view/SVG练习6.html">SVG练习6.html</a></li>
+    <li><a href="/view/修改元素属性练习.html">修改元素属性练习.html</a></li>
+    <li><a href="/view/字符串操作-文字搬运工.html">字符串操作-文字搬运工.html</a></li>
+    <li><a href="/view/字符串操作-查找替换删除.html">字符串操作-查找替换删除.html</a></li>
+    <li><a href="/view/字符串操作练习.html">字符串操作练习.html</a></li>
+    <li><a href="/view/定时器-抖动函数练习.html">定时器-抖动函数练习.html</a></li>
+    <li><a href="/view/定时器-抢购商品练习.html">定时器-抢购商品练习.html</a></li>
+    <li><a href="/view/定时器-点击加分效果.html">定时器-点击加分效果.html</a></li>
+    <li><a href="/view/定时器管理.html">定时器管理.html</a></li>
+    <li><a href="/view/百度文库评分练习.html">百度文库评分练习.html</a></li>
+    <li><a href="/view/获取鼠标位置.html">获取鼠标位置.html</a></li>
+  </ul>
 </body>
 </html>
