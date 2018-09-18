@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>定时器管理 - 开关设置</title>
+    <style>
+    #div1{width: 100px; height: 100px; background: red; position: absolute; top: 50px; left: 30px;}
+    </style>
+  </head>
+  <body>
+    <input type="button" id="btn1" value="按钮">
+    <div id="div1"></div>
+    <script>
+      var oBtn = document.getElementById('btn1');
+      var oDiv = document.getElementById('div1');
+      var timer = null;
+
+      oBtn.onclick = function(){
+        timer = setInterval(function(){
+          var speed = parseInt(getStyle(oDiv, 'left')) + 10;
+          if(speed > 800){
+            speed = 800;
+          }
+          oDiv.style.left = speed + 'px';
+          if(speed == 800){
+            clearInterval(timer);
+          }
+        } ,30)
+      }
+      function getStyle(obj, attr){
+        return obj.currentStyle?obj.currentSytle[attr]:getComputedStyle(obj)[attr];
+      }
+    </script>
+  </body>
+</html>

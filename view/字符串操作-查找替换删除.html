@@ -1,0 +1,208 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>字符串操作-查找替换删除</title>
+  <script>
+    /**
+     * 功能要求：
+     * 右侧边栏点击展开、收缩，包含查找、替换功能，hover变色
+     * 点击展开，出现查找、替换按钮
+     * 点击查找出现查找弹框，点击替换出现替换弹框（弹框关闭按钮）
+     * 查找
+     * 没有填写内容时点击查找按钮出现提醒弹框，提醒输入为空
+     * 有查找内容时，查找到的所有内容飘黄色
+     * 重复查找，清除上次查找效果，新的查找内容飘黄
+     * 找不到内容时，出现提醒弹框，【您输入的XXX未找到】
+     * 替换
+     * 没有输入时，出现提醒弹框，【请输入要替换的值】
+     * 找不到内容时，出现提醒弹框，【未找到XXX】
+     * 有可以找到的内容时，实现替换
+     * 无替换值时，出现提醒弹框，提醒【您确定要删除XXX？】，可选择确定或取消
+     */
+  </script>
+  <style>
+    body,div,text,ul,li{margin: 0;padding: 0;}
+    li{list-style: none;}
+    #bd{width: 706px;margin: 50px auto;position: relative;}
+    .con{width: 610px;float: left;}
+    .con .text{padding: 23px;;border: 12px solid #e5e5e5;font-size: 18px;line-height: 36px;}
+
+    .con .popup{padding: 23px;border: 12px solid #939393;background: #d2d2d2;display: none;}
+    .con ul{border-bottom: 2px solid #a3a3a3;}
+    .con li{display: inline-block;width: 92px;height: 38px;line-height: 38px;background: #fff;text-align: center;cursor: pointer;}
+    .con li.focus{background: #a3a3a3;color: #fff;}
+    .con input[type=text]{width: 212px;height: 32px;margin-top: 25px;border: 2px solid #c6c6c8;line-height: 32px;outline: none;}
+    .con input[type=button]{width: 40px;height: 30px;border: 1px solid #a9aaa8;cursor: pointer;outline: none;}
+    .opt{position: absolute;top: 0;right: 0;}
+    .con input[type=button]:hover{background: #f6751f;color: #fff;}
+
+    .opt li{width: 94px;height: 46px;margin-bottom: 1px;line-height: 46px;background: #d2d2d2;text-align: center;cursor: pointer;}
+    .opt li.focus{background: #a8a8a8;color: #fff;}
+    .opt li:hover{background: #f6751f;color: #fff;}
+    .opt li:nth-child(n+2){display: none;}
+
+    span{background: #f6dc3b;}
+  </style>
+</head>
+<body>
+  <div id="bd">
+    <div class="con">
+      <div class="text">
+          Sass 有两种语法格式。首先是 SCSS (Sassy CSS) ,也是本参考资料示例所使用的格式 , 这种格式仅在 CSS3 语法的基础上进行扩展，这意味着每个CSS样式表是一个同等的SCSS文件。此外，SCSS 也支持大多数 CSS hacks 写法 以及浏览器专属前缀语法 (vendor-specific syntax)，例如，IE 古老的 filter 语法。 这种语法的样式表文件需要以 .scss 作为拓展名。
+      </div>
+      <div class="popup">
+        <ul>
+          <li class="J-search-opt">查找</li>
+          <li class="J-replace-opt">替换</li>
+        </ul>
+        <div class="J-search-module">
+          <input type="text">
+          <input type="button" value="查找">
+        </div>
+        <div class="J-replace-module">
+          <input type="text">
+          <input type="text">
+          <input type="button" value="替换">
+        </div>
+      </div>
+    </div>
+    <ul class="opt">
+      <li class="focus J-spread-opt">展开</li>
+      <li class="focus J-fold-opt">收起</li>
+      <li class="J-search-opt">查找</li>
+      <li class="J-replace-opt">替换</li>
+    </ul>
+  </div>
+  <script>
+    window.onload = function(){
+      // 简单封装
+      function $(str){
+        if(str[0] === '#'){
+          return document.getElementById(str.substring(1));
+        }else if(str[0] === '.'){
+          return document.getElementsByClassName(str.substring(1));
+        }else{
+          return document.getElementsByTagName(str);
+        }
+      }
+
+      var oText = $('.text')[0];
+      var aOpt = $('.opt')[0].getElementsByTagName('li');
+      var oSpreadOpt = $('.J-spread-opt')[0];
+      var oFoldOpt = $('.J-fold-opt')[0];
+      var aSearchOpt = $('.J-search-opt');
+      var aReplaceOpt = $('.J-replace-opt');
+      var oPopup = $('.popup')[0];
+      var oSearchModule = $('.J-search-module')[0];
+      var oReplaceModule = $('.J-replace-module')[0];
+      var oSearchInp = oSearchModule.getElementsByTagName('input')[0];
+      var aReplaceInp = oReplaceModule.getElementsByTagName('input');
+      var oSearchBtn = oSearchModule.getElementsByTagName('input')[1];
+      var oReplaceBtn = oReplaceModule.getElementsByTagName('input')[2];
+
+      oSearchModule.style.display = 'none';
+      oReplaceModule.style.display = 'none';
+
+      oSpreadOpt.onclick = function(){
+        for(var i = 0; i < aOpt.length; i++){
+          if(i === 0){
+            aOpt[i].style.display = 'none';
+          }else{
+            aOpt[i].style.display = 'block';
+          }
+        }
+      }
+      oFoldOpt.onclick = function(){
+        for(var i = 0; i < aOpt.length; i++){
+          if(i === 0){
+            aOpt[i].style.display = 'block';
+          }else{
+            aOpt[i].style.display = 'none';
+          }
+        }
+        oPopup.style.display = 'none';
+      }
+      // for(var i = 0; i < aSearchOpt.length; i ++){
+      //   aSearchOpt[i].onclick = function(){
+      //     oPopup.style.display = 'block';
+      //     oSearchModule.style.display = 'block';
+      //     oReplaceModule.style.display = 'none';
+      //     for(var j = 0; j < aSearchOpt.length; j ++){
+      //       aSearchOpt[j].className += ' focus';
+      //       aReplaceOpt[j].className = 'J-replace-opt';
+      //     }
+      //   }
+      // }
+      // for(var i = 0; i < aReplaceOpt.length; i ++){
+      //   aReplaceOpt[i].onclick = function(){
+      //     oPopup.style.display = 'block';
+      //     oSearchModule.style.display = 'none';
+      //     oReplaceModule.style.display = 'block';
+      //     for(var j = 0; j < aReplaceOpt.length; j ++){
+      //       aReplaceOpt[j].className += ' focus';
+      //       aSearchOpt[j].className = 'J-search-opt';
+      //     }
+      //   }
+      // }
+      function optFn(objArr1, objArr2, obj1, obj2, className){
+        for(var i = 0; i < objArr1.length; i ++){
+          objArr1[i].onclick = function(){
+            oPopup.style.display = 'block';
+            obj1.style.display = 'block';
+            obj2.style.display = 'none';
+            for(var j = 0; j < objArr1.length; j ++){
+              objArr1[j].className += ' focus';
+              objArr2[j].className = className;
+            }
+          }
+        }
+      }
+      optFn(aSearchOpt, aReplaceOpt, oSearchModule, oReplaceModule, 'J-replace-opt');
+      optFn(aReplaceOpt, aSearchOpt, oReplaceModule, oSearchModule, 'J-search-opt');
+
+
+      var text = oText.innerHTML;
+      oSearchBtn.onclick = function(){
+        var searchText = oSearchInp.value;
+        var arr = text.split(searchText);
+
+        if(!searchText){
+          alert('请输入要查找的内容！');
+        }else if(arr.length === 1){
+          alert('您输入的“' + searchText + '”未找到!');
+        }else{
+          oText.innerHTML = arr.join('<span>' + searchText + '</span>');
+        }
+      }
+
+      oReplaceBtn.onclick = function(){
+        var originText = aReplaceInp[0].value;
+        var replaceText = aReplaceInp[1].value;
+        var arr = text.split(originText);
+
+        if(!originText){
+          alert('请输入要替换的值!');
+        }else if(arr.length === 1){
+          alert('未找到“' + originText + '”!');
+        }else if(!replaceText){
+          var r = confirm('您确定要删除“' + originText + '”？');
+          if(!r) return;
+          oText.innerHTML = arr.join('<span>' + replaceText + '</span>');
+        }else{
+          oText.innerHTML = arr.join('<span>' + replaceText + '</span>');
+        }
+      }
+
+      document.onkeydown = function(e){
+        var event = e || window.event;
+        var code = event.keyCode || event.which || event.charCode;
+        if(code == 13){
+          
+        }
+      }
+    }
+  </script>
+</body>
+</html>

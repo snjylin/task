@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>QQ菜单练习</title>
+        <style>
+            div,h2,ul{margin: 0; padding: 0;}
+            li{list-style: none;}
+            #list{width: 200px;margin: 0 auto;border: 1px solid #000;}
+            #list h2{height: 30px;line-height: 30px;background-color: #6ff;text-indent: 10px;font-size: 18px;}
+            #list h2::before{content: '';display: inline-block;width: 4px;height: 4px;background: blue;margin: 5px;}
+            #list .active{background: yellow;}
+            #list ul{display: none;}
+            #list ul li{line-height: 24px;background: #f8f8f8;text-indent: 24px;}
+            #list ul li:not(:last-child){border-bottom: 1px solid #000;}
+            #list ul .hover{background: #6ff;}
+        </style>
+    </head>
+    <body>
+        <ul id="list">
+            <li class="item">
+                <h2>好友</h2>
+                <ul>
+                    <li>小A</li>
+                    <li>小B</li>
+                    <li>小C</li>
+                </ul>
+            </li>
+            <li class="item">
+                <h2>陌生人</h2>
+                <ul>
+                    <li>小D</li>
+                    <li>小E</li>
+                    <li>小F</li>
+                </ul>
+            </li>
+            <li class="item">
+                <h2>黑名单</h2>
+                <ul>
+                    <li>小G</li>
+                    <li>小H</li>
+                    <li>小I</li>
+                </ul>
+            </li>
+        </ul>
+        <script>
+            window.onload = function(){
+                var oList = document.getElementById('list');
+                var aH2 = oList.getElementsByTagName('h2');
+                var aUl = oList.getElementsByTagName('ul');
+                var aLi = null;
+                var arrLi = [];
+
+                for(var i = 0; i < aH2.length; i++){
+                    aH2[i].index = i;
+                    aH2[i].onOff = true;
+
+                    aH2[i].onclick = function(){
+                        if(aH2[this.index].onOff){
+                            aUl[this.index].style.display = 'block';
+                            aH2[this.index].className = 'active';
+                            aH2[this.index].onOff = false;
+                        }else{
+                            aUl[this.index].style.display = 'none';
+                            aH2[this.index].className = '';
+                            aH2[this.index].onOff = true;
+                        }
+                    }
+                }
+
+                for(var i = 0; i < aUl.length; i++){
+                    aLi = aUl[i].getElementsByTagName('li');
+                    for(var j = 0; j < aLi.length; j++){
+                        arrLi.push(aLi[j]);
+                    }
+                }
+
+                for(var i = 0; i < arrLi.length; i++){
+                    arrLi[i].onclick = function(){
+
+                        for(var i = 0; i < arrLi.length; i++){
+                            arrLi[i].className = '';
+                        }
+
+                        this.className = 'hover';
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

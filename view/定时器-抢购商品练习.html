@@ -1,0 +1,223 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>定时器-抢购商品练习</title>
+  <style>
+    div,h3,p,ul,dl,dt,dd,strong{margin: 0;padding: 0}
+    li{list-style: none;}
+    .cl{*zoom: 1;}
+    .cl:after{content: '';display: block;clear: both;visibility: hidden;}
+    #bd{width: 760px;margin: auto;}
+    h3{border-bottom: 3px solid #a5a5a5;font-size: 18px;color: #6f6f6f;line-height: 32px;}
+
+    .goods-list{position: relative;}
+    .goods-list li{position: absolute;z-index: 1;float: left;width: 168px;height: 326px;margin-right: 2px;padding: 0 10px;}
+    .goods-list li.soldout {background: url(../img/定时器-抢购商品练习_soldout.png) no-repeat;}
+    .goods-list li.anim{animation: 1s dropDown;}
+    @keyframes dropDown {
+      0% {
+        top: 0;
+        opacity: 1;
+      }
+      100% {
+        top: 374px;
+        opacity: 0;
+      }
+    }
+    .goods-list li.soldout>*{display: none;}
+    .goods-list input[type=text]{display: inline-block;width: 128px;height: 22px;margin-top: 6px;font-size: 12px;line-height: 22px;color: #593b39;outline: none;}
+    .goods-list input[type=button]{display: inline-block;padding: 0 0 0 5px;border: none;line-height: 24px;outline: none;color: #593b39;font-weight: bold;cursor: pointer;}
+    .goods-list .time{font-size: 14px;color: #a6a6a6;line-height: 52px;text-align: center;}
+    .goods-list .pic{position: relative;width: 138px;height: 138px;padding: 21px 13px 5px;text-align: center;line-height: 138px;font-size: 0;}
+    .goods-list .pic img{max-width: 100%;max-height: 100%;}
+    .goods-list .activity-icon{position: absolute;top: 0;right: 0;width: 53px;height: 53px;padding-top: 15px;background: url(../img/定时器-抢购商品练习_activity_icon.png) no-repeat;color: #fff;text-align: center;}
+    .goods-list .activity-icon strong{font-size: 20px;line-height: 20px;}
+    .goods-list .activity-icon small{font-size: 14px;line-height: 14px;}
+    .goods-list .text{padding: 12px 0;font-size: 15px;line-height: 19px;}
+    .goods-list .title{color: #787878;}
+    .goods-list .text strong{color: #c8c8c8;}
+    .goods-list .text span{color: #b03151;}
+
+    .detail-list{margin-top: 48px;}
+    .detail-list dt{height: 42px;line-height: 42px;color: #593b39;background: #e5e5e5;}
+    .detail-list dt strong,.detail-list .title,.detail-list .price{display: inline-block;width: 198px;padding: 0 6px;text-align: center;font-size: 15px;float: left;}
+    .detail-list dd{position: relative;height: 84px;margin-top: 5px;line-height: 84px;background: #e5e5e5;white-space: nowrap;}
+    .detail-list .title{color: #3c3c3c;overflow: hidden;text-overflow: ellipsis;}
+    .detail-list .pic{position: absolute;top: 5px;right: 53px;width: 90px;height: 72px;border: 1px solid #593b39;text-align: center;line-height: 72px;font-size: 0;}
+    .detail-list .pic img{max-width: 100%;max-height: 100%;}
+    .detail-list .activity-icon{position: absolute;top: 0;right: 0;width: 34px;height: 34px;padding-top: 8px;background: url(../img/定时器-抢购商品练习_activity_icon.png) no-repeat;background-size: 34px;color: #fff;text-align: center;}
+    .detail-list .activity-icon strong{font-size: 12px;line-height: 12px;}
+    .detail-list .activity-icon small{font-size: 10px;line-height: 10px;}
+
+
+    .total{margin-left: 10px;font-size: 17px;line-height: 52px;}
+    .total strong{color: #272727;}
+    .total strong span{color: #b03151;}
+
+    .detail-list,.total{display: none;}
+  </style>
+</head>
+<body>
+  <div id="bd">
+    <div>
+      <h3>限购时间</h3>
+      <ul class="goods-list cl">
+        <li>
+          <div><input type="text" value="September 17,2019 15:47:35"><input type="button" value="确定"></div>
+          <p class="time">剩余0天00时00分00秒</p>
+          <div class="pic"><img src="../img/定时器-抢购商品练习_img1.png" alt=""><div class="activity-icon"><strong>9.5<br><small>折</small></strong></div></div>
+          <div class="text">
+            <p class="title">疯狂599，美的爆款隐藏式面板下拉门电磁炉</p>
+            <strong>抢购价 : <span>¥ 599.00</span></strong>
+          </div>
+        </li>
+        <li>
+          <div><input type="text" value="September 17,2019 15:47:35"><input type="button" value="确定"></div>
+          <p class="time">剩余0天00时00分00秒</p>
+          <div class="pic"><img src="../img/定时器-抢购商品练习_img2.png" alt=""><div class="activity-icon"><strong>3.8<br><small>折</small></strong></div></div>
+          <div class="text">
+            <p class="title">疯狂599，美的爆款隐藏式面板下拉门电磁炉</p>
+            <strong>抢购价 : <span>¥ 123.00</span></strong>
+          </div>
+        </li>
+        <li>
+          <div><input type="text" value="September 17,2019 15:47:35"><input type="button" value="确定"></div>
+          <p class="time">剩余0天00时00分00秒</p>
+          <div class="pic"><img src="../img/定时器-抢购商品练习_img3.png" alt=""><div class="activity-icon"><strong>0.5<br><small>折</small></strong></div></div>
+          <div class="text">
+            <p class="title">疯狂599，美的爆款隐藏式面板下拉门电磁炉</p>
+            <strong>抢购价 : <span>¥ 198.00</span></strong>
+          </div>
+        </li>
+        <li>
+          <div><input type="text" value="September 17,2019 15:47:35"><input type="button" value="确定"></div>
+          <p class="time">剩余0天00时00分00秒</p>
+          <div class="pic"><img src="../img/定时器-抢购商品练习_img4.png" alt=""><div class="activity-icon"><strong>5.9<br><small>折</small></strong></div></div>
+          <div class="text">
+            <p class="title">疯狂599，美的爆款隐藏式面板下拉门电磁炉</p>
+            <strong>抢购价 : <span>¥ 168.00</span></strong>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <dl class="detail-list cl">
+      <dt><strong>商品名称</strong><strong>价格</strong></dt>
+      <!-- <dd class="cl">
+        <div class="title">疯狂599，美的爆款隐藏式面板下拉门电磁炉</div>
+        <div class="price"><strong>599.00</strong></div>
+        <div class="pic"><img src="../img/定时器-抢购商品练习_img3.png" alt=""><div class="activity-icon"><strong>0.5<br><small>折</small></strong></div></div>
+      </dd> -->
+      </dd>
+    </dl>
+    <p id="total" class="total"><strong>总价：<span>0</span>元</strong></p>
+  </div>
+  <script>
+    window.onload = function(){
+      var oUl = document.getElementsByTagName('ul')[0];
+      var aLi = oUl.getElementsByTagName('li');
+      var str = '';
+      var reg = '';
+
+      for(var i = 0; i < aLi.length; i++){
+        aLi[i].style.left += 190*(i%4) + 'px';
+        aLi[i].style.top += 346*(Math.floor(i/4)) + 'px';
+      }
+      oUl.style.height = Math.ceil(i/4)*346 + 'px';
+
+      for(var i = 0; i < aLi.length; i++){
+        aLi[i].onmouseover = function(){
+          var aInp = this.getElementsByTagName('input');
+          var oP = this.getElementsByTagName('p')[0];
+          if(!aInp[1]) return;
+          var _this = this;
+          var pos = parseInt(getStyle(_this, 'left'));
+
+          aInp[1].onclick = function(i){
+            str = aInp[0].value;
+            reg = /(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{2},\d{4}\s(\d{1,2}:){2}\d{1,2}/g;
+            if(!str){
+              alert('请输入内容！');
+            }else if(!reg.test(str)){
+              alert('输入内容不合法，请输入以下格式：\n' +
+              '"month dd,yyyy hh:mm:ss"。\n例如：January 12,2006 22:19:35\n' +
+              '注：\nmonth:用英文 表示月份名称，从January到December \n' +
+              'dd:表示一个 月中的第几天，从1到31 \n' +
+              'yyyy:四位数表示的年份\n' +
+              'hh:小时数，从0（午夜）到23（晚11点）' +
+              'mm: 分钟数，从0到59的整数' +
+              'ss:秒数，从0到59的整数');
+            }
+
+            var iNew = new Date(str);
+            clearInterval(_this.timer);
+
+            _this.timer = setInterval(function(){
+              var iNow = new Date();
+              var t = Math.floor((iNew - iNow)/1000);
+              if(t >= 0){
+                str = Math.floor(t/86400) + '天' + addZero(Math.floor(t%86400/3600)) + '时' + addZero(Math.floor(t%86400%3600/60)) + '分' + addZero(Math.floor(t%60)) + '秒';
+                oP.innerHTML = '剩余' + str;
+              }else {
+                clearInterval(_this.timer);
+                oP.innerHTML = '剩余0天00时00分00秒';
+
+                _this.className = 'soldout';
+
+
+                if(_this.className == 'soldout'){
+                  var arr = [],arr1 = [];
+                  var timer1 = null;
+                  var num = 0;
+                  for(var i = 6; i > 0; i -=2){
+                    arr.push(i, -i);
+                  }
+                  arr.push(0);
+                  timer1 = setInterval(function(){
+                    _this.style['left'] =  pos + arr[num] + 'px';
+                    num ++;
+                    if(num === arr.length){
+                      clearInterval(timer1);
+
+                      var oDl = document.getElementsByClassName('detail-list')[0];
+                      var oDd = document.createElement('dd');
+
+                      _this.className += ' anim';
+                      oDl.style.display = 'block';
+                      oDl.appendChild(oDd);
+                      var title = _this.getElementsByClassName('title')[0].textContent;
+                      var price = _this.getElementsByClassName('text')[0].getElementsByTagName('span')[0].textContent.split(' ')[1];
+                      var img = _this.getElementsByTagName('img')[0].getAttribute('src');
+                      var discount = _this.getElementsByClassName('activity-icon')[0].getElementsByTagName('strong')[0].childNodes[0].textContent;
+
+                      oDd.innerHTML = '<div class="title">' + title + '</div>\
+                        <div class="price"><strong>' + price + '</strong></div>\
+                        <div class="pic"><img src="' + img + '" alt=""><div class="activity-icon"><strong>' + discount + '<br><small>折</small></strong></div></div>';
+
+                      var oTotal = document.getElementById('total');
+                      var oTotalPrice = oTotal.getElementsByTagName('span')[0];
+                      oTotal.style.display = 'block';
+                      oTotalPrice.innerHTML = parseInt(oTotalPrice.textContent) + parseInt(price);
+                    }
+                  }, 50);
+                }
+              }
+            }, 1000);
+          };
+        };
+      }
+
+      function getStyle(obj, attr){
+        return obj.currentStyle?obj.currentStyle[attr]:getComputedStyle(obj)[attr];
+      }
+
+      function addZero(num){
+        var str = '';
+        str = num < 10 ? ('0' + num) : num.toString();
+        return str;
+      }
+    }
+  </script>
+</body>
+</html>

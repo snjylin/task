@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>百度文库评分练习</title>
+        <style>
+            span{margin-right: 16px;}
+            .score{cursor: pointer;}
+            i{display: inline-block;width: 10px;height: 10px;background: lightgray;}
+            i.selected{background: orange;}
+            i.gray{background: gray;}
+        </style>
+    </head>
+    <body>
+        <div>
+            <span>评分</span>
+            <span class="score">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </span>
+            <span id="comment">极差</span>
+        </div>
+        <script>
+            window.onload = function(){
+                var aIcon = document.getElementsByTagName('i');
+                var oSpan = document.getElementById('comment');
+                var arr = ['很差','较差','还行','推荐','力荐'];
+                var onOff = true;
+                for(var i = 0; i < aIcon.length; i ++){
+                    aIcon[i].index = i;
+                    aIcon[i].onOff = true;
+                    aIcon[i].onmouseover = function(){
+                        for(var j = 0; j < aIcon.length; j++){
+                            aIcon[j].style.backgroundColor = '';
+                            aIcon[j].onOff = true;
+                        }
+                        for(var j = 0; j <= this.index; j ++){
+                            aIcon[j].style.backgroundColor = 'red';
+                            oSpan.textContent = arr[this.index];
+                        }
+                    }
+                    aIcon[i].onmouseout = function(){
+                        for(var i = 0; i < aIcon.length; i ++){
+                            if(!aIcon[i].onOff){
+                                for(var j = 0; j <= i; j ++){
+                                    aIcon[j].style.backgroundColor = 'red';
+                                    oSpan.textContent = arr[this.index];
+                                }
+                            }else{
+                                for(var j = 0; j <= this.index; j ++){
+                                    aIcon[j].style.backgroundColor = '';
+                                    oSpan.textContent = '';
+                                }
+                            }
+                        }
+                    }
+                    aIcon[i].onclick = function(){
+                        for(var j = 0; j <= this.index; j ++){
+                            aIcon[j].style.backgroundColor = 'red';
+                        }
+                        this.onOff = false;
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

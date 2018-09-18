@@ -1,0 +1,63 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>字符串操作练习</title>
+  <style>
+    body{width: 500px;margin: auto;}
+    span{background: yellow;}
+  </style>
+</head>
+<body>
+  <input type="text">
+  <input type="text">
+  <input type="button" value="查找">
+  <input type="button" value="替换">
+  <div>
+    <p>这是一段文字。这是一段文字。这是一段文字。这是一段文字。这是一段文字。这是一段文字。这是一段文字。这是一段文字。</p>
+    <span><<收起</span>
+  </div>
+  <script>
+  // 收起展开
+    var oP = document.getElementsByTagName('p')[0];
+    var oSpan = document.getElementsByTagName('span')[0];
+    var str = oP.innerHTML;
+    var onOff = true;
+
+    oSpan.onclick = function () {
+      if(onOff){
+        oP.innerHTML = str.substring(0, 7);
+        oSpan.innerHTML = '>>展开';
+      }else{
+        oP.innerHTML = str;
+        oSpan.innerHTML = '<<收起';
+      }
+      onOff = !onOff;
+    }
+  </script>
+  <script>
+  // 查找
+   var aInp = document.getElementsByTagName('input');
+   var oP = document.getElementsByTagName('p')[0];
+   aInp[2].onclick = function(){
+     var str = aInp[0].value;
+     if(!str) return;
+     oP.innerHTML = oP.innerHTML.split(str).join('<span>' + str + '</span>');
+   }
+  </script>
+  <script>
+    // 替换
+    window.onload = function(){
+      var aInp = document.getElementsByTagName('input');
+      var oP = document.getElementsByTagName('p')[0];
+      aInp[3].onclick = function(){
+        var str = aInp[0].value;
+        var newStr = aInp[1].value;
+        if(!str) return;
+        oP.innerHTML = oP.innerHTML.split(str).join(newStr);
+      }
+    }
+  </script>
+</body>
+</html>

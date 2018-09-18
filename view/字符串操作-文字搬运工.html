@@ -1,0 +1,125 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文字搬运工</title>
+  <script>
+    /**
+     * 功能要求：
+     * 当鼠标移到把文字右移上时把左边的文字移动到右边，按钮hover变色
+     * 左边区域是文本框可以输入，右边区域不可以操作
+     * 文字移动完之后进度条结束
+     *
+     * 点击把文字右移：
+     * 1.把字数统计出来
+     * 2.左边减少一个文字，右边添加一个文字
+     * 3.出现一个进度条
+     * 4.文字转移过程中不可以操作
+     * 5.左边输入新的内容时，右边清空，字数重新统计
+     */
+  </script>
+  <style>
+    body,div,textarea{margin: 0;padding: 0;}
+    #bd{position: relative;width: 686px;height: 194px; margin: 100px auto 0;padding: 8px;border: 10px solid #d2d2d2;}
+    .panel{width: 280px;height: 192px;padding: 8px;border: 1px dotted #d2d2d2;font-size: 13px;line-height: 1.5em;box-sizing: border-box;}
+    .textarea{background: #fefdd4;position: absolute;top: 8px;left: 8px;}
+    .textarea textarea{width: 100%;height: 100%;border: none;outline: none;resize: none;background: #fefdd4;}
+
+    .opt{text-align: center;font-size: 14px;}
+    .opt .btn{width: 106px;height: 36px;margin: auto;background: #f6751f;line-height: 36px;color: #fff;cursor: pointer;}
+    .opt .btn.tansfer{background: #fce4d3;}
+    .opt .count{line-height: 38px;}
+    .opt .loading{margin-top: 6px;font-size: 0;}
+    .opt span{display: inline-block;width: 7px;height: 9px;margin: 0 1px;background: #f9be43;}
+    .opt span.cur{background: #f42818;}
+
+    .target{background: #86fdfe;position: absolute;top: 8px;right: 8px;}
+
+    .opt .loading{display: none;}
+  </style>
+</head>
+<body>
+  <div id="bd">
+    <div class="textarea panel">
+      <textarea>Sass 有两种语法格式。首先是 SCSS (Sassy CSS) ,也是本参考资料示例所使用的格式 , 这种格式仅在 CSS3 语法的基础上进行扩展，这意味着每个CSS样式表是一个同等的SCSS文件。此外，SCSS 也支持大多数 CSS hacks 写法 以及浏览器专属前缀语法 (vendor-specific syntax)，例如，IE 古老的 filter 语法。 这种语法的样式表文件需要以 .scss 作为拓展名。
+      </textarea>
+    </div>
+    <div class="opt">
+      <div class="btn">把文字右移</div>
+      <div class="count">0/0</div>
+      <div class="loading">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="target panel"></div>
+  </div>
+  <script>
+    window.onload = function(){
+      function $(str){
+        if(str[0] === '#'){
+          return document.getElmentById(str.substring(1));
+        }else if(str[0] === '.'){
+          return document.getElementsByClassName(str.substring(1));
+        }else{
+          return document.getElementsByTagName(str);
+        }
+      }
+      var oTextarea = $('textarea')[0];
+      var oOpt = $('.opt')[0];
+      var oBtn = $('.btn')[0];
+      var oCount = $('.count')[0];
+      var oLoading = $('.loading')[0];
+      var aSpan = oLoading.getElementsByTagName('span');
+      var oTarget = $('.target')[0];
+
+      oBtn.onclick = function(){
+        var currentText = oTextarea.value;
+        var originArr = currentText.split('');
+        var currentArr = originArr.concat();
+        var targetArr = new Array().concat(originArr[0]);
+        var timer = null;
+
+        clearInterval(timer);
+        oOpt.style.pointerEvents = 'none';
+        timer = setInterval(function(){
+          currentArr = currentArr.slice(1);
+
+          targetArr = targetArr.concat(currentArr[0]);
+          oTextarea.value = currentArr.slice(1).join('');
+
+          oTarget.innerHTML = targetArr.join('');
+
+          this.className = 'btn tansfer';
+          oCount.innerHTML = currentArr.length + '/' + originArr.length;
+          oLoading.style.display = 'block';
+
+          for(var i = 0; i < aSpan.length; i++){
+            aSpan[i].index = i;
+          }
+          for(var i = 0; i < aSpan.length; i++){
+            if(aSpan[i].index === (originArr.length - currentArr.length - 1)%8){
+              aSpan[i].className = 'cur';
+            }else{
+              aSpan[i].className = '';
+            }
+          }
+
+          if(currentArr.length === 0){
+            clearInterval(timer);
+            oOpt.style.pointerEvents = 'auto';
+            oLoading.style.display = 'none';
+          }
+        }, 50);
+      }
+    }
+  </script>
+</body>
+</html>
