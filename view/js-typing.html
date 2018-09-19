@@ -1,0 +1,26 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js typing</title>
+</head>
+<body>
+  <div id='divTyping'></div>
+  <script>
+    var str = 'js 实现的 打字效果。';
+    var i = 0;
+    function typing(){
+      var divTyping = document.getElementById('divTyping');
+      if (i <= str.length) {
+        divTyping.innerHTML = str.slice(0, i++) + '_';
+        setTimeout('typing()', 200);//递归调用
+      }
+      else{
+        divTyping.innerHTML = str;//结束打字,移除 _ 光标
+      }
+    }
+   typing();
+  </script>
+</body>
+</html>

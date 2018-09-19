@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+    <meta charset="UTF-8" />
+    <head>
+        <title>表格样式实现</title>      
+        <style type="text/css">
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            .box {width: 100%;border: 1px solid #000000;box-sizing: border-box;position: relative;}
+            .img1{height: 100%;width: 100%;}
+            li{list-style: none;}
+            .box li{border-bottom: 1px dashed #000000;width: 80%;background: #DCDCDC;height: 35px;}/*dashed虚线;width控制li宽度*/
+            .text{position: absolute;top:42.5px;left:30%;}
+            .text20{position: absolute;top:42.5px;right:20px;}
+        </style>
+    </head>
+    <body>
+        <div class="demo">
+            <div class="box" style="">
+                <ul>
+                    <li>内容1</li>
+                    <li>内容2</li>
+                    <li>内容3</li>
+                </ul>
+                <div class="text">
+                    灰色内容占总宽度80%
+                </div>
+                <div class="text20">
+                    白色内容占</br>总宽度20%
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

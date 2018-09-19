@@ -1,0 +1,62 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用mailto在网页中链接Email地址</title>
+  <style>
+    body{margin: 0;padding: 0;}
+    table{margin: 50px auto;}
+    table,th,td{border: 1px solid #eee;border-collapse: collapse;padding: 12px;}
+  </style>
+</head>
+<body>
+  <table>
+  	<caption></caption>
+  	<tbody>
+  		<tr>
+  			<th>功能</th>
+  			<th>关键字</th>
+  			<th>功能详解</th>
+  			<th>举例</th>
+  		</tr>
+  		<tr>
+  			<td>邮箱地址</td>
+  			<td>mailto:</td>
+  			<td>浏览器会自动调用默认的客户端电子邮件程序（如Outlook），并在收件人框中自动填上收件人的地址</td>
+  			<td><a href="mailto:snjy.lin@gmail.com">发送</a></td>
+  		</tr>
+  		<tr>
+  			<td>抄送地址</td>
+  			<td>cc=</td>
+  			<td>在收件人地址后用<em>cc=</em>地址，可以填写抄送地址</td>
+  			<td><a href="mailto:snjy.lin@gmail.com?cc=snjy.lin@gmail.com">发送</a></td>
+  		</tr>
+  		<tr>
+  			<td>密件抄送地址</td>
+  			<td>bcc=</td>
+  			<td>在收件人地址后用<em>bcc=</em>地址，可以填上密件抄送地址</td>
+  			<td><a href="mailto:snjy.lin@gmail.com?bcc=snjy.lin@gmail.com">发送</a></td>
+  		</tr>
+  		<tr>
+  			<td>多个收件人、抄送、密件抄送人</td>
+  			<td>;</td>
+  			<td>用分号隔开多个收件人的地址，可以实现发送给多个收件人功能</td>
+  			<td><a href="mailto:snjy.lin@gmail.com;snjy.lin@gmail.com"></a></td>
+  		</tr>
+  		<tr>
+  			<td>邮件主题</td>
+  			<td>subject=</td>
+  			<td>用<em>subject=</em>添加邮件主题</td>
+  			<td><a href="mailto:snjy.lin@gmail.com?subject=发送电子邮件"></a></td>
+  		</tr>
+  		<tr>
+  			<td>邮件内容</td>
+  			<td>body=</td>
+  			<td>用<em>body=</em>添加邮件的内容</td>
+  			<td><a href="mailto:snjy.lin@gmail.com?body=欢迎"></a></td>
+  		</tr>
+  	</tbody>
+  </table>
+</body>
+</html>
