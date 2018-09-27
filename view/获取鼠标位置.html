@@ -4,20 +4,23 @@
         <title>获取鼠标位置</title>
     </head>
     <body>
+        <div id="div">在页面任意位置点击，以下将会显示点击点的位置。</div>
         <script>
-            document.body.onclick = function(event){
-                // var e = event || window.event;
-                var e = arguments[0];
+          var text = document.getElementById('div').innerHTML;
+          document.body.onclick = function(event){
+              // var e = event || window.event;
+              var e = arguments[0];
 
-                var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-                var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-                var x = e.pageX || e.clientX + scrollX;
-                var y = e.pageY || e.clientY + scrollY;
-                alert('pageX: ' + x + '\npageY: ' + y);
-                // return { 'x': x, 'y': y };
-                alert( 'screenX: ' + e.screenX + '\nscreenY: ' + e.screenY);
-                alert( 'clientX: ' + e.clientX + '\nclientX: ' + e.clientY);
-            }
+              var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+              var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+              var x = e.pageX || e.clientX + scrollX;
+              var y = e.pageY || e.clientY + scrollY;
+
+              var pagePosition = 'pageX: ' + x + '<br>pageY: ' + y;
+              var screenPosition = 'screenX: ' + e.screenX + '<br>screenY: ' + e.screenY;
+              var clientPosition = 'clientX: ' + e.clientX + '<br>clientX: ' + e.clientY;
+              document.getElementById('div').innerHTML = text + '<br><br>' + pagePosition + '<br><br>' + screenPosition + '<br><br>' + clientPosition;
+          }
         </script>
     </body>
 </html>
