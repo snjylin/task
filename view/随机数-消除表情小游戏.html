@@ -15,8 +15,177 @@
      * 记得失分，十分超过10分，游戏结束，弹出提醒框【失败了～～重新开始吧！】
      */
   </script>
+  <style>
+    body,div,h1,p,input,span{margin: 0;padding: 0;}
+    body{text-align: center;background: #f3f3f3;}
+    h1{font-size: 30px;line-height: 70px;font-weight: 700;}
+    p{font-size: 20px;line-height: 38px;}
+    /* input{width: 76px;height: 22px;margin-top: 3px;border: 1px solid #959595;font-size: 20px;line-height: 22px;outline: none;cursor: pointer;} */
+    #main{position: relative;width: 938px;margin: 27px auto;}
+    #main .cont{position: relative;width: 938px;/*height: 528px;*/height: 420px;background: #fff;}
+    #main .cont img{position: absolute;}
+    #main .cont img:hover{cursor: pointer;}
+    #main .score{position: absolute;top: 0;left: -176px;width: 176px;height: 78px;padding: 11px 0;background: #fefdd4;font-size: 18px;line-height: 2em;}
+  </style>
 </head>
 <body>
+  <div id="doc">
+    <h1>你的鼠标有多快？</h1>
+    <p>游戏说明：点击“开始游戏”，随机掉下QQ表情，点中它，千万别让它掉下去！！</p>
+    <input type="button" value="开始游戏">
+    <div id="main">
+      <div class="cont">
+        <!-- <img src="../img/emoji/emoji_1.png" alt=""> -->
+      </div>
+      <div class="score">
+        <p>得分：<span>0</span>分</p>
+        <p>失分：<span>0</span>分</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.onload = function(){
+      var oBtn = $('input')[0];
+      var oContent = $('.cont')[0];
+      var aSpan = $('span');
+      var aImg = $('img');
+      var onOff = true;
 
+      oBtn.onclick = function(){
+        var timer = null;
+        clearInterval(timer);
+
+        if(onOff){
+          onOff = false;
+
+          // 定时器开始之前先执行一次
+          addEmoji({
+            obj: oContent,
+            speed: 1
+          });
+          oBtn.disabled = true;
+          oBtn.value = '游戏进行中……';
+
+          timer = setInterval(function(){
+            addEmoji({
+              obj: oContent,
+              speed: 1
+            });
+          }, 3000);
+        }
+
+        /**
+         * [addEmoji description]
+         * @param {[type]} obj 容器
+         * @param {[type]} speed    表情掉落速度
+         */
+        function addEmoji({obj: obj, speed: speed}){
+          var Img = document.createElement('img');
+          var timer1 = null;
+          var pos = 0;
+          var containWidth = obj.offsetWidth;
+          var containHeight = obj.offsetHeight;
+
+          clearInterval(timer1);
+
+          Img.src = '../img/emoji/emoji_' + randomFn(1, 590) + '.png';
+          Img.style.left = randomFn(0, containWidth - 20) + 'px';
+          obj.appendChild(Img);
+
+          timer1 = setInterval(function(){
+            pos += speed;
+            Img.style.top = pos + 'px';
+
+            if(pos > containHeight - 20){
+              clearInterval(timer1);
+              Img.parentNode.removeChild(Img);
+              shake({
+                obj: oContent,
+                dir: 'top'
+              });
+
+              aSpan[1].innerText = parseInt(aSpan[1].innerText) + 1;
+            }
+
+            if(parseInt(aSpan[1].innerText) === 10){
+              clearInterval(timer1);
+              alert('GAME OVER!');
+              window.location.reload();
+            }
+          }, 50);
+
+          Img.onclick = function(){
+            clearInterval(timer1);
+            shake({
+              obj: Img,
+              dir: 'left',
+              display: false
+            });
+            aSpan[0].innerText = parseInt(aSpan[0].innerText) + 1;
+            addEmoji({
+              obj: obj,
+              speed: speed + 1
+            });
+          };
+        }
+      }
+
+      /**
+       * [shake description]
+       * @param  {[type]} obj     目标对象
+       * @param  {[type]} dir     方向
+       * @param  {[type]} display 抖动完是否消失：ture:不消失 false:消失
+       * @return {[type]}         [description]
+       */
+      function shake({obj: obj, dir: dir, display: display}){
+        dir = dir || 'left';
+        var pos = parseInt(getStyle(obj, dir));
+        var arr = [];
+        var timer = null;
+        var num = 0;
+
+        for(var i = 3; i > 0; i -=1){
+          arr.push(i, -i);
+        }
+        arr.push(0);
+
+        clearInterval(timer);
+        timer = setInterval(function(){
+          obj.style[dir] = pos + arr[num] + 'px';
+          num ++;
+          if(num === arr.length){
+            clearInterval(timer);
+            if(display == false ){
+              obj.parentNode.removeChild(obj);
+            }
+          }
+        }, 50);
+      }
+
+      function getStyle(obj, attr){
+        return obj.currentStyle?obj.currentStyle[attr]:getComputedStyle(obj)[attr];
+      }
+
+      function $(str){
+        if(str[0] === '#'){
+          return document.getElementById(str.substring(1));
+        }else if(str[0] === '.'){
+          return document.getElementsByClassName(str.substring(1));
+        }else{
+          return document.getElementsByTagName(str);
+        }
+      }
+
+      /**
+       * [randomFn description]
+       * @param  {[type]} num1 [description]
+       * @param  {[type]} num2 [description]
+       * @return {[type]}      返回num1和num2之间的随机整数
+       */
+      function randomFn(num1, num2){
+        return Math.round(Math.random()*(num2 - num1) + num1);
+      }
+    }
+  </script>
 </body>
 </html>
