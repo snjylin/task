@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 留言本 && 键盘控制div移动 && 自定义右键菜单</title>
+  <style>
+    #div1{width: 100px;height: 100px;background: red;position: absolute;left: 300px;color: #fff;}
+    #div2{width: 100px;height: 200px;border: 1px solid #000;position: absolute;display: none;}
+  </style>
+</head>
+<body>
+  <div id="doc">
+    <input type="text" id="text1" placeholder="留言本">
+    <p>按住ctrl键并按下回车键发送输入内容<br>按上下左右键移动方块位置</p>
+    <ul id="ul1"></ul>
+    <div id="div1">键盘控制div移动</div>
+    <div id="div2">模拟右键菜单</div>
+  </div>
+  <script>
+    window.onload = function(){
+      /**
+       * 留言本
+       * @type {[type]}
+       */
+      var oText = document.getElementById('text1');
+      var oUl = document.getElementById('ul1');
+
+      oText.onkeyup = function(ev){
+        var ev = ev || event;
+
+        if(this.value != ''){
+
+          if(ev.keyCode == 13 && ev.ctrlKey){
+            // ev.keyCode == 13 && ev.keyCode == 17 不能存在这个写法，这个条件永远满足不了
+            var oLi = document.createElement('li');
+            oLi.innerHTML = this.value;
+
+            if(oUl.children[0]){
+              oUl.insertBefore(oLi, oUl.children[0]);
+            }else{
+              oUl.appendChild(oLi);
+            }
+          }
+        }
+      }
+
+      /**
+       * 键盘控制div移动
+       * @type {[type]}
+       */
+      var oDiv = document.getElementById('div1');
+      // 不是所有元素都能够接收键盘事件，能够响应用户输入的元素，能够接收焦点的元素能够接收键盘事件
+      // onkeydown: 如果按下不抬起，那么会连续触发
+      // 连续输入时，第一个字符和后面输入的字符之间间隔的时间比较长，为了判断用户确实是想连续输入？
+      // 作业：解决连续输入时输入第一个字符和后面字符间隔时间较长的问题，提示：定时器，键盘只用作控制作用
+
+      var timer = null;
+
+      document.onkeydown = function(ev){
+        var ev = ev || event;
+
+        clearInterval(timer);
+
+        switch(ev.keyCode){
+          case 37:
+            timerFn(oDiv, 'left', 3);
+            break;
+          case 38:
+            timerFn(oDiv, 'top', 3);
+            break;
+          case 39:
+            timerFn(oDiv, 'right', 3);
+            break;
+          case 40:
+            timerFn(oDiv, 'bottom', 3);
+            break;
+        }
+      }
+      document.onkeyup = function(){
+        clearInterval(timer);
+      }
+
+      function timerFn(obj, dir, speed){
+          return timer = setInterval(function(){
+            if(dir == 'right'){
+              dir = 'left';
+              speed = -speed;
+            }
+            if(dir == 'bottom'){
+              dir = 'top';
+              speed = -speed;
+            }
+
+            // oDiv.style.left = oDiv.offsetLeft - 10 + 'px';  向左
+            // oDiv.style.top = oDiv.offsetTop - 10 + 'px';  向上
+            // oDiv.style.left = oDiv.offsetLeft + 10 + 'px';  向右
+            // oDiv.style.top = oDiv.offsetTop + 10 + 'px';  向下
+            obj.style[dir] = obj['offset' + dir[0].toUpperCase() + dir.slice(1)] - speed + 'px';
+          }, 10);
+      }
+
+      /**
+       * 自定义右键菜单
+       * @type {[type]}
+       */
+      var oMenu = document.getElementById('div2');
+
+      document.oncontextmenu = function(ev){
+        var ev = ev || event;
+
+        oMenu.style.left = ev.clientX + 'px';
+        oMenu.style.top = ev.clientY + 'px';
+        oMenu.style.display = 'block';
+
+        return false;
+      }
+      document.onclick = function(){
+        oMenu.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 事件流</title>
+  <style>
+    #div1,#div2,#div3{padding: 40px;}
+    #div1{background: red;}
+    #div2{background: green;}
+    #div3{background: blue;position: absolute;top: 300px;right: 300px;}
+    #div4{width: 100px;height: 200px;background: red;position: absolute;left: -100px;top: 200px;}
+    #div5{width: 30px;height: 60px;position: absolute;right: -30px;top: 70px;background: black;color: white;text-align: center;}
+  </style>
+</head>
+<body>
+  <div id="div1">
+    <div id="div2">
+      <div id="div3"></div>
+    </div>
+  </div>
+  <div id="div4">
+    <div id="div5">分享到</div>
+  </div>
+  <script>
+    window.onload = function() {
+      /**
+       * 事件冒泡机制：当一个元素接收到事件的时候，会把它接收到的所有传给它的父级，一直到顶层window。
+       */
+
+      var oDiv1 = document.getElementById('div1');
+      var oDiv2 = document.getElementById('div2');
+      var oDiv3 = document.getElementById('div3');
+      function fn1(){
+        alert(this.id);
+      }
+      // oDiv1.onclick = fn1;  给XXX加事件，给元素加事件处理函数
+      // 事件函数绑定
+      oDiv1.onclick = fn1;  //告诉div1，如果它接收到了一个点击事件，那么它就去执行fn1
+      // oDiv2.onclick = fn1;  // 事件发生后不做任何处理，但是不影响接收事件
+      oDiv3.onclick = fn1;
+
+
+      var oDiv4 = document.getElementById('div4');
+      oDiv4.onmouseover = function(){
+        this.style.left = '0px';
+      }
+      oDiv4.onmouseout = function(){
+        this.style.left = '-100px';
+      }
+    }
+  </script>
+</body>
+</html>
