@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM-拖拽改变层大小</title>
+  <style>
+    #div1{width: 100px;height: 100px;background: red;position: absolute;top: 200px;left: 500px;}
+  </style>
+</head>
+<body>
+  <div id="div1"></div>
+  <script>
+    /*
+    原理分析：
+      拖动右边时，只有盒子右边位置发生变化，，只改变盒子宽度
+        以向右拖动为例，盒子宽度增加，增加的宽度为鼠标最后停在的位置的X轴坐标值减去鼠标按下时的X轴坐标值（当向左拖动时，为负值，盒子宽度减小）
+      拖动左边时，只有盒子左边位置发生变化，改变盒子宽度和left值
+        以向右拖动为例，盒子宽度减小，减小的宽度为鼠标最后停在的位置的X轴坐标值减去鼠标按下时的X轴坐标值（当向左拖动时，为负值，盒子宽度增加），left值则要加上这段距离
+      拖动上边时，只有盒子上边位置发生变化，改变盒子高度和top值
+      拖动下边时，只有盒子下边位置发生变化，只改变盒子高度
+
+      考虑同时拖动两条边的情况
+     */
+    window.onload = function(){
+      var oDiv = document.getElementById('div1');
+
+      oDiv.onmousedown = function(ev){
+        var ev = ev || event;
+        var disX = ev.clientX;
+        var disY = ev.clientY;
+        var disL = oDiv.offsetLeft;
+        var disT = oDiv.offsetTop;
+        var disW = oDiv.offsetWidth;
+        var disH = oDiv.offsetHeight;
+
+        var pos = '';
+
+
+        if(disX < disL + 10){
+          pos = 'left';
+        }
+        if(disX > disL + disW - 10){
+          pos = 'right';
+        }
+        if(disY < disT + 10){
+          pos = 'top';
+        }
+        if(disY > disT + disH - 10){
+          pos = 'bottom';
+        }
+        if(disX < disL + 10 && disY < disT + 10){
+          pos = 'left-top';
+        }
+        if(disX < disL + 10 && disY > disT + disH - 10){
+          pos = 'left-bottom';
+        }
+        if(disX > disL + disW - 10 && disY < disT + 10){
+          pos = 'right-top';
+        }
+        if(disX > disL + disW - 10 && disY > disT + disH - 10){
+          pos = 'right-bottom';
+        }
+
+        document.onmousemove = function(ev){
+          var ev = ev || event;
+
+          switch(pos){
+            case 'left':
+              dragToChange(oDiv,{
+                'width': disW - (ev.clientX - disX) + 'px',
+                'left': disL + (ev.clientX - disX) + 'px',
+                'cursor': 'ew-resize'
+              });
+              break;
+            case 'right':
+              dragToChange(oDiv,{
+                'width': disW + (ev.clientX - disX) + 'px',
+                'cursor': 'ew-resize'
+              });
+              break;
+            case 'top':
+              dragToChange(oDiv,{
+                'height': disH - (ev.clientY - disY) + 'px',
+                'top': disT + (ev.clientY - disY) + 'px',
+                'cursor': 'ew-resize'
+              });
+              break;
+            case 'bottom':
+              dragToChange(oDiv,{
+                'height': disH + (ev.clientY - disY) + 'px',
+                'cursor': 'ns-resize'
+              });
+              break;
+            case 'left-top':
+              dragToChange(oDiv,{
+                'width': disW - (ev.clientX - disX) + 'px',
+                'left': disL + (ev.clientX - disX) + 'px',
+                'height': disH - (ev.clientY - disY) + 'px',
+                'top': disT + (ev.clientY - disY) + 'px',
+                'cursor': 'nwse-resize'
+              });
+              break;
+            case 'left-bottom':
+              dragToChange(oDiv,{
+                'width': disW - (ev.clientX - disX) + 'px',
+                'left': disL + (ev.clientX - disX) + 'px',
+                'height': disH + (ev.clientY - disY) + 'px',
+                'cursor': 'nesw-resize'
+              });
+              break;
+            case 'right-top':
+              dragToChange(oDiv,{
+                'width': disW + (ev.clientX - disX) + 'px',
+                'height': disH - (ev.clientY - disY) + 'px',
+                'top': disT + (ev.clientY - disY) + 'px',
+                'cursor': 'nesw-resize'
+              });
+              break;
+            case 'right-bottom':
+              dragToChange(oDiv,{
+                'width': disW + (ev.clientX - disX) + 'px',
+                'height': disH + (ev.clientY - disY) + 'px',
+                'cursor': 'nwse-resize'
+              });
+              break;
+          }
+        }
+
+        document.onmouseup = function(){
+          document.onmousemove = document.onmouseup = null;
+        }
+
+        return false;
+      };
+
+      /**
+       * 拖拽改变元素属性
+       * @param  {[type]} obj   拖拽的对象（元素）
+       * @param  {[type]} attrs 属性对象
+       */
+      function dragToChange(obj, attrs, callback){
+
+        for(var attr in attrs){
+          obj.style[attr] = attrs[attr];
+        }
+
+        callback && callback();
+      }
+    }
+  </script>
+</body>
+</html>

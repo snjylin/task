@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 模拟滚动条控制其他元素的变化</title>
+  <style>
+    #div1{width: 30px;height: 500px;background: black;position: absolute;top: 10px;left: 10px;}
+    #div2{width: 30px;height: 30px;background: red;position: absolute;}
+    #div3{width: 498px;height: 498px;border: 1px solid green;position: absolute;top: 10px;left: 50px;overflow: hidden;}
+    #div4{position: relative;}
+  </style>
+</head>
+<body>
+  <div id="div1">
+    <div id="div2"></div>
+  </div>
+  <div id="div3">
+    <div id="div4">
+      模拟滚动条控制其他元素的变化 1<br>模拟滚动条控制其他元素的变化 2<br>模拟滚动条控制其他元素的变化 3<br>模拟滚动条控制其他元素的变化 4<br>模拟滚动条控制其他元素的变化 5<br>模拟滚动条控制其他元素的变化 6<br>模拟滚动条控制其他元素的变化 7<br>模拟滚动条控制其他元素的变化 8<br>模拟滚动条控制其他元素的变化 9<br>模拟滚动条控制其他元素的变化 10<br>模拟滚动条控制其他元素的变化 11<br>模拟滚动条控制其他元素的变化 12<br>模拟滚动条控制其他元素的变化 13<br>模拟滚动条控制其他元素的变化 14<br>模拟滚动条控制其他元素的变化 15<br>模拟滚动条控制其他元素的变化 16<br>模拟滚动条控制其他元素的变化 17<br>模拟滚动条控制其他元素的变化 18<br>模拟滚动条控制其他元素的变化 19<br>模拟滚动条控制其他元素的变化 20<br>模拟滚动条控制其他元素的变化 21<br>模拟滚动条控制其他元素的变化 22<br>模拟滚动条控制其他元素的变化 23<br>模拟滚动条控制其他元素的变化 24<br>模拟滚动条控制其他元素的变化 25<br>模拟滚动条控制其他元素的变化 26<br>模拟滚动条控制其他元素的变化 27<br>模拟滚动条控制其他元素的变化 28<br>模拟滚动条控制其他元素的变化 29<br>模拟滚动条控制其他元素的变化 30<br>模拟滚动条控制其他元素的变化 31<br>模拟滚动条控制其他元素的变化 32<br>模拟滚动条控制其他元素的变化 33<br>模拟滚动条控制其他元素的变化 34<br>模拟滚动条控制其他元素的变化 35<br>模拟滚动条控制其他元素的变化 36<br>模拟滚动条控制其他元素的变化 37<br>模拟滚动条控制其他元素的变化 38<br>模拟滚动条控制其他元素的变化 39<br>模拟滚动条控制其他元素的变化 40<br>模拟滚动条控制其他元素的变化 41<br>模拟滚动条控制其他元素的变化 42<br>模拟滚动条控制其他元素的变化 43<br>模拟滚动条控制其他元素的变化 44<br>模拟滚动条控制其他元素的变化 45<br>模拟滚动条控制其他元素的变化 46<br>模拟滚动条控制其他元素的变化 47<br>模拟滚动条控制其他元素的变化 48<br>模拟滚动条控制其他元素的变化 49<br>模拟滚动条控制其他元素的变化 50<br>
+    </div>
+  </div>
+  <script>
+    window.onload = function(){
+      /**
+       * 模拟滚动条控制内容滚动
+       */
+      var oDiv1 = document.getElementById('div1');
+      var oDiv2 = document.getElementById('div2');
+      var oDiv3 = document.getElementById('div3');
+      var oDiv4 = document.getElementById('div4');
+      if (oDiv3.offsetHeight > oDiv4.offsetHeight) {
+        oDiv1.style.display = 'none';
+      }
+
+      oDiv2.onmousedown = function(ev){
+        var ev = ev || event;
+        var disY = ev.clientY - this.offsetTop;
+
+        document.onmousemove = function(ev){
+          var ev = ev || event;
+
+          var T = ev.clientY - disY;
+          var iMax = oDiv1.offsetHeight - oDiv2.offsetHeight;
+
+          if (T < 0) {
+            T = 0;
+          } else if (T > iMax){
+            T = iMax;
+          }
+
+          oDiv2.style.top = T + 'px';
+
+          if (oDiv3.offsetHeight < oDiv4.offsetHeight) {
+            oDiv4.style.top = T / iMax * (oDiv3.offsetHeight - oDiv4.offsetHeight) + 'px';
+          }
+        }
+
+        document.onmouseup = function(){
+         document.onmousemove = document.onmouseup = null;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

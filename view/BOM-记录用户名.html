@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 记录用户名</title>
+</head>
+<body>
+  <input type="text" id="username">
+  <input type="button" value="登陆" id="login">
+  <input type="button" value="删除" id="del">
+  <script>
+    window.onload = function(){
+      var oUsername = document.getElementById('username');
+      var oLogin = document.getElementById('login');
+      var oDel = document.getElementById('del');
+
+      if(getCookie('username')){
+        oUsername.value = getCookie('username');
+      }
+
+      oLogin.onclick = function(){
+        alert('登陆成功！');
+        setCookie('username', oUsername.value, 5);
+      }
+
+      oDel.onclick = function(){
+        removeCookie('username');
+        oUsername.value = '';
+      }
+
+
+      function setCookie(key, value, t){
+        var oDate = new Date();
+        oDate.setDate(oDate.getDate() + t);
+        document.cookie = key + '=' + value + ';expires=' + oDate.toGMTString();
+      }
+      function getCookie(key){
+        var arr1 = document.cookie.split(';');
+        for (var i = 0; i < arr1.length; i++) {
+          var arr2 = arr1[i].split('=');
+          if (arr2[0] == key) {
+            return decodeURI(arr2[1]);
+          }
+        }
+      }
+      function removeCookie(key){
+        setCookie(key, '', -1);
+      }
+    }
+  </script>
+</body>
+</html>

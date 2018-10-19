@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 碰撞检测</title>
+  <style>
+    #div1{width: 100px;height: 100px;background: red;position: absolute;z-index: 2;color: #fff;}
+    img{width: 100px;height: 100px;position: absolute;top: 200px;left: 500px;background: #eee;}
+  </style>
+</head>
+<body>
+  <div id="div1">当方块碰到图片时改变图片</div>
+  <img src="../img/emoji/emoji_1.png" alt="">
+  <script>
+    window.onload = function(){
+      /*
+      原理分析：
+        把拖动的对象记为div，被碰撞对象记为img
+        把整个区域通过img所在边划分成九宫格，当要拖拽的对象不在图像所在的方格时则不会碰上，否则会碰上
+        L1,R1,T1,B1 分别为div的左右上下边
+        L2,R2,T2,B2 分别为img的左右上下边
+        当R1 < L2 或 L1 > R2 或 B1 < T2 或 T1 > B2 时不会发生碰撞
+       */
+      var oDiv = document.getElementById('div1');
+      var oImg = document.getElementsByTagName('img')[0];
+
+      drag(oDiv);
+
+      /**
+       * 拖拽函数封装
+       * @param  {[type]} obj 要拖拽的对象
+       * @param  {[type]} dis 距离目标多远（多少像素）时磁性吸附
+       * @return {[type]}     [description]
+       */
+      function drag(obj){
+        obj.onmousedown = function(ev){
+          var ev = ev || event;
+          var disX = ev.clientX - this.offsetLeft;
+          var disY = ev.clientY - this.offsetTop;
+
+          if(obj.setCapture){
+            obj.setCapture();
+          }
+
+          document.onmousemove = function(ev){
+            var ev = ev || event;
+
+            var L = ev.clientX - disX;
+            var T = ev.clientY - disY;
+
+            // 要拖拽的对象左右边距离可视区左边和上下边距离可视区上边的距离
+            // L1,R1,T1,B1 分别为要拖拽的对象的左右上下边
+            var L1 = L;
+            var T1 = T;
+            var R1 = L1 + obj.offsetWidth;
+            var B1 = T1 + obj.offsetHeight;
+
+            // 图片左右边距离可视区左边和上下边距离可视区上边的距离
+            // L2,R2,T2,B2 分别为图片的左右上下边
+            var L2 = oImg.offsetLeft;
+            var T2 = oImg.offsetTop;
+            var R2 = L2 + oImg.offsetWidth;
+            var B2 = T2 + oImg.offsetHeight;
+
+            // 把整个区域通过图片所在边划分成九宫格，当要拖拽的对象不在图像所在的方格时则不会碰上，否则会碰上
+            if(R1 < L2 || L1 > R2 || B1 < T2 || T1 > B2){
+              oImg.src = '../img/emoji/emoji_1.png';
+            }else{
+              oImg.src = '../img/emoji/emoji_2.png';
+            }
+
+            obj.style.left = L + 'px';
+            obj.style.top = T + 'px';
+          }
+
+          document.onmouseup = function(){
+            document.onmousemove = document.onmouseup = null;
+
+            if(obj.releaseCapture){
+              obj.releaseCapture();
+            }
+          }
+
+          return false;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

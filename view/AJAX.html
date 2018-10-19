@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <input type="button" value="按钮">get方式
+  <br>
+  <input type="button" value="按钮">post方式
+  <br>
+  <!-- <input type="button" value="按钮">get方式获取newsList -->
+  <br>
+  <input type="button" value="按钮">post方式
+  <br>
+  <div id="div1"></div>
+  <ul id="ul1"></ul>
+  <script>
+    window.onload = function(){
+      var aBtn = document.getElementsByTagName('input');
+      var oDiv = document.getElementById('div1');
+
+      aBtn[0].onclick = function(){
+        var xhr = new XMLHttpRequest;
+        // get 方式
+        xhr.open('get', '../model/1.get.php?username=' + encodeURI('名字') + '&age=3', true);
+        xhr.send();
+
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState == 4){
+            if(xhr.status == 200){
+              // alert(xhr.responseText);
+              oDiv.innerHTML = 'get：' + xhr.responseText;
+            }else{
+              oDiv.innerHTML = 'get：出错了，ERR:' + xhr.status;
+            }
+          }
+        }
+      }
+
+      aBtn[1].onclick = function(){
+        var xhr = new XMLHttpRequest;
+
+        // post方式
+        xhr.open('post', '../model/1.post.php', true);
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.send('username=名字&age=3');
+
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState == 4){
+            if(xhr.status == 200){
+              // alert(xhr.responseText);
+              oDiv.innerHTML = 'post：' + xhr.responseText;
+            }else{
+              oDiv.innerHTML = 'post：出错了，ERR:' + xhr.status;
+            }
+          }
+        }
+      }
+
+      aBtn[2].onclick = function(){
+        // ajax('get', '../model/getList.php', '', function(data){
+        //   var data = JSON.parse(data);
+        //   var oUl = document.getElementById('ul1');
+        //   var html = '';
+        //
+        //   for(var i = 0; i < data.length; i++){
+        //     html += '<li><a href="">'+data[i].title+'</a>[<span>'+data[i].date+'</span>]</li>'
+        //   }
+        //   oUl.innerHTML = html;
+        // });
+
+        ajax({
+          type: 'get',
+          url:'../model/getList.php',
+          success: function(data){
+            var data = JSON.parse(data);
+            var oUl = document.getElementById('ul1');
+            var html = '';
+
+            for(var i = 0; i < data.length; i++){
+              html += '<li><a href="">'+data[i].title+'</a>[<span>'+data[i].date+'</span>]</li>'
+            }
+            oUl.innerHTML = html;
+          }
+        });
+
+        setInterval(function(){
+          ajax({
+            type: 'get',
+            url:'../model/getList.php',
+            success: function(data){
+              var data = JSON.parse(data);
+              var oUl = document.getElementById('ul1');
+              var html = '';
+
+              for(var i = 0; i < data.length; i++){
+                html += '<li><a href="">'+data[i].title+'</a>[<span>'+data[i].date+'</span>]</li>'
+              }
+              oUl.innerHTML = html;
+            }
+          });
+        }, 1000);
+      }
+
+      aBtn[3].onclick = function(){
+        ajax({
+          type: 'post',
+          url: '../model/1.post.php',
+          data: 'username=名字&age=3',
+          success: function(data){
+            oDiv.innerHTML = data;
+          }
+        });
+      }
+
+    };
+
+    // ajax({
+    //   type: 'get',
+    //   url: 'getList.php',
+    //   data: '',
+    //   success: function(data){
+    //     //...
+    //   }
+    // });
+
+    /**
+     * ajax 封装
+     * @param  {[type]} obj [
+     * @param  {[type]} type    [description]
+     * @param  {[type]} url     [description]
+     * @param  {[type]} data    [description]
+     * @param  {[type]} success [description]
+     * @return {[type]}         [description]
+     * ]
+     */
+    function ajax(obj){
+      obj.type = obj.type || 'get';
+      obj.success = obj.success || null;
+
+      var xhr = new XMLHttpRequest;
+
+      if(obj.type == 'get' && obj.data){
+        var url = obj.url + '?' + obj.data;
+      }
+      xhr.open(obj.type, obj.url, true);
+      if(obj.type == 'get'){
+        xhr.send();
+      }else{
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.send(obj.data);
+      }
+
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+          if(xhr.status == 200){
+            // alert(xhr.responseText);
+            obj.success && obj.success(xhr.responseText);
+          }else{
+            alert('出错了，ERR:' + xhr.status);
+          }
+        }
+      }
+    }
+
+    // ajax 封装
+    // function ajax(method, url, data, success){
+    //   var xhr = new XMLHttpRequest;
+    //
+    //   if(method == 'get' && data){
+    //     url = url + '?' + data;
+    //   }
+    //   xhr.open(method, url, true);
+    //   if(method == 'get'){
+    //     xhr.send();
+    //   }else{
+    //     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    //     xhr.send(data);
+    //   }
+    //
+    //   xhr.onreadystatechange = function(){
+    //     if(xhr.readyState == 4){
+    //       if(xhr.status == 200){
+    //         // alert(xhr.responseText);
+    //         success && success(xhr.responseText);
+    //       }else{
+    //         alert('出错了，ERR:' + xhr.status);
+    //       }
+    //     }
+    // }
+  </script>
+</body>
+</html>

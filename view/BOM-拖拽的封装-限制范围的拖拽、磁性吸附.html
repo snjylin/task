@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BOM - 拖拽的封装-限制范围的拖拽、磁性吸附</title>
+  <style>
+    #div1{width: 100px;height: 100px;background: red;position: absolute;top: 100px;left: 100px;}
+    img{position: absolute;top: 100px;left: 300px;}
+  </style>
+</head>
+<body>
+  <div id="div1"></div>
+  <img src="../img/emoji/emoji_1.png" alt="">
+  <script>
+    window.onload = function(){
+      /*
+      原理分析：
+        限制范围：（可视区内） 拖拽的对象：`div`
+          当`div`left值小于0时，超出可视区左边，将其left值设为0
+          当`div`top值小于0时，超出可视区上边，将其top值设为0
+          当`div`right值大于（`div`距离可视区左边的距离加`div`的宽度）时，超出可视区左边，将其right值设为（`div`距离可视区左边的距离加`div`的宽度）
+          当`div`bottom值大于（`div`距离可视区上边的距离加`div`的高度）时，超出可视区左边，将其bottom值设为（`div`距离可视区上边的距离加`div`的高度）
+        磁性吸附：拖拽的对象：`div` 吸附：可视区边缘
+          当`div`靠近可视区边缘时，将`div`的top|right|bottom|left值设为同上
+       */
+      var oDiv = document.getElementById('div1');
+      var oImg = document.getElementsByTagName('img')[0];
+
+      drag(oDiv, 50);
+      drag(oImg);
+
+      /**
+       * 拖拽函数封装
+       * @param  {[type]} obj 要拖拽的对象
+       * @param  {[type]} dis 距离目标多远（多少像素）时磁性吸附
+       * @return {[type]}     [description]
+       */
+      function drag(obj, dis){
+        dis = dis || 30;
+        obj.onmousedown = function(ev){
+          var ev = ev || event;
+          var disX = ev.clientX - this.offsetLeft;
+          var disY = ev.clientY - this.offsetTop;
+
+          if(obj.setCapture){
+            obj.setCapture();
+          }
+
+          document.onmousemove = function(ev){
+            var ev = ev || event;
+
+            var L = ev.clientX - disX;
+            var T = ev.clientY - disY;
+
+            if(L < dis){
+              L = 0;
+            }else if(L > document.documentElement.clientWidth - obj.offsetWidth - dis){
+              L = document.documentElement.clientWidth - obj.offsetWidth;
+            }
+
+            if(T < dis){
+              T = 0;
+            }else if(T > document.documentElement.clientHeight - obj.offsetHeight - dis){
+              T = document.documentElement.clientHeight - obj.offsetHeight;
+            }
+
+            obj.style.left = L + 'px';
+            obj.style.top = T + 'px';
+          }
+
+          document.onmouseup = function(){
+            document.onmousemove = document.onmouseup = null;
+
+            if(obj.releaseCapture){
+              obj.releaseCapture();
+            }
+          }
+
+          return false;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AJAX - 瀑布流</title>
+  <style>
+    body{margin: 0;}
+    #ul1{width: 1028px;margin: 100px auto 0;}
+    li{width: 247px;list-style: none;float: left;margin-right: 10px;}
+    li div{border: 1px solid #000;padding: 10px;margin-bottom: 10px;}
+    li div img{width: 225px;display: block;}
+  </style>
+</head>
+<body>
+  <ul id="ul1">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  <script>
+    /**
+     * ajax 封装
+     * @param  {[type]} obj.method  [description]
+     * @param  {[type]} obj.url     [description]
+     * @param  {[type]} obj.data    [description]
+     * @param  {[type]} obj.success [description]
+     * @return {[type]}         [description]
+     */
+    function ajax(obj){
+      obj.method = obj.method || 'get';
+
+      var xhr = new XMLHttpRequest;
+      if(obj.method == 'get' && obj.data){
+        obj.url = obj.url + '?' + obj.data;
+      }
+      xhr.open(obj.method, obj.url, true);
+      if (obj.method == 'get') {
+        xhr.send();
+      } else {
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.send(obj.data);
+      }
+
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+          if (xhr.status == 200) {
+            obj.success && obj.success(xhr.responseText);
+          } else {
+            alert('出错了！ERR:' + status);
+          }
+        }
+      }
+    }
+  </script>
+  <script>
+    window.onload = function(){
+      var oUl = document.getElementById('ul1');
+      var aLi = document.getElementsByTagName('li');
+      var iLen = aLi.length;
+
+      ajax({
+        url: '../model/getPics.php',
+        data: 'cpage=1',
+        success: function(data){
+          data = JSON.parse(data);
+
+          for(var i = 0; i < data.length; i++){
+            // 获取高度最短的li
+            var _index = getShort();
+
+            var oDiv = document.createElement('div');
+            var oImg = document.createElement('img');
+            oImg.src = data[i].preview;
+            // 图片加载较慢，image高度没有被撑开，可能会使div高度计算不准
+            // 可以使用递归，利用image对象的onload事件进行图片预加载（onload事件触发的时机是图片加载完毕的时候，在这个事件里面去获取的图片的高度）
+            // 这里给图片加上宽高度实现，需要后端传图片的宽高值
+            oImg.style.width = '225px';
+            oImg.style.height = data[i].height * (225 / data[i].width) + 'px';
+            oDiv.appendChild(oImg);
+            var oP = document.createElement('p');
+            oP.innerHTML = data[i].title;
+            oDiv.appendChild(oImg);
+
+            aLi[_index].appendChild(oDiv);
+          }
+        }
+      });
+
+      // 获取高度最短的li
+      function getShort () {
+        var index = 0;
+        var iH = aLi[index].offsetHeight;
+
+        for(var i = 1; i < aLi.length; i++){
+          if (iH > aLi[i].offsetHeight) {
+            index = i;
+            iH = aLi[i].offsetHeight;
+          }
+        }
+
+        return index;
+      }
+    }
+  </script>
+</body>
+</html>
