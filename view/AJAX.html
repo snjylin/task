@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>AJAX</title>
 </head>
 <body>
   <input type="button" value="按钮">get方式
@@ -141,7 +141,13 @@
       obj.type = obj.type || 'get';
       obj.success = obj.success || null;
 
-      var xhr = new XMLHttpRequest;
+      var xhr = null;
+
+      try {
+        xhr = new XMLHttpRequest();
+      } catch (e) {
+        xhr = new ActiveXObject(Microsoft.XMLHTTP);
+      }
 
       if(obj.type == 'get' && obj.data){
         var url = obj.url + '?' + obj.data;
@@ -168,7 +174,13 @@
 
     // ajax 封装
     // function ajax(method, url, data, success){
-    //   var xhr = new XMLHttpRequest;
+    //   var xhr = null;
+    //
+    //   try {
+    //     xhr = new XMLHttpRequest();
+    //   } catch (e) {
+    //     xhr = new ActiveXObject('Microsoft.XMLHTTp');
+    //   }
     //
     //   if(method == 'get' && data){
     //     url = url + '?' + data;

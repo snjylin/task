@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AJAX - 豆瓣搜索实例</title>
+  <style>
+    #q{width: 300px;height: 30px;padding: 5px;border: 1px solid #f90;font-size: 16px;}
+    #btn{display: inline-block;padding: 0 10px;line-height: 42px;cursor: pointer;}
+    #btn:hover{background: #f90;color: #fff;}
+    dl{margin-right: 20px;border-bottom: 1px dotted #000;display: inline-block;width: 200px;height: 200px;color: #333;vertical-align: middle;}
+    dt{font-weight: bold;}
+    dd img{width: 100px;}
+    #page{display: none;}
+    #page span{display: inline-block;min-width: 20px;margin-right: 10px;padding: 5px;text-align: center;}
+    #page span:hover, #page span.focus{background: #f90;color: #fff;cursor: pointer;}
+    #goTop{position: fixed;right: 50px;bottom: 50px;z-index: 1;padding: 3px;border: 1px solid #f90;background: #fff;color: #f90;cursor: pointer;display: none;}
+    #pageinner{display: inline-block;}
+    a{text-decoration: none;color: inherit;}
+  </style>
+</head>
+<body>
+  <div id="doc">
+    <input type="text" id="q" autocomplete="off">
+    <!-- <input type="button" id="btn" value="搜索"> -->
+    <span id="btn">搜索</span>
+    <p id="msg"></p>
+    <hr>
+    <div id="list"></div>
+    <div id="page">
+      <span id="prevPage">上一页</span>
+      <div id="pageinner"></div>
+      <span id="nextPage">下一页</span>
+    </div>
+
+    <div id="goTop">< 返回顶部</div>
+  </div>
+
+  <script>
+    var iPage = 1;
+    var offset = 20;
+    var isFirst = true;
+
+    function fn1(data){
+      if (!data || !data.entry || !data.entry.length) {
+        return;
+      }
+
+      var oMsg = document.getElementById('msg');
+      var oList = document.getElementById('list');
+
+      oMsg.innerHTML = data.title.$t + ' : ' + data['opensearch:totalResults'].$t;
+
+      var aEntry = data.entry;
+      var html = '';
+      for (var i = 0; i < aEntry.length; i++) {
+        html += '<dl><a target="_blank" href="' + aEntry[i].link[1]['@href'] + '"><dt>' + aEntry[i].title.$t + '</dt><dd><img src="' + aEntry[i].link[2]['@href'] + '" alt="" /></dd></a></dl>'
+      }
+
+      var offset = 20;
+      var page = Math.ceil(data['opensearch:totalResults'].$t / offset);
+
+      oList.innerHTML = html;
+
+      var oPage = document.getElementById('page');
+      var oPageInner = document.getElementById('pageinner');
+      var aSpan = oPageInner.getElementsByTagName('span');
+      var oPrevPage = document.getElementById('prevPage');
+      var oNextPage = document.getElementById('nextPage');
+
+      if (page == 1) {
+        oPage.style.display = 'none';
+      }
+
+      var pageInnerHtml = '';
+      for (var i = 1; i < 11; i++) {
+        pageInnerHtml += '<span>' + i + '</span>';
+      }
+
+      if (!oPageInner.innerHTML) {
+        oPageInner.innerHTML = pageInnerHtml;
+      }
+
+      if (isFirst) {
+        aSpan[0].className = 'focus';
+        isFirst = false;
+      }
+
+      for (var i = 0; i < aSpan.length; i++) {
+
+        if (!aSpan[i].index) {
+          aSpan[i].index = i;
+        }
+
+        aSpan[i].onclick = function(){
+          oPrevPage.style.display = 'inline-block';
+          var oNowPage = document.getElementsByClassName('focus')[0];
+          var iNowPage = oNowPage.index;
+          oNowPage.className = 'none';
+          this.className = 'focus';
+          loadBookData(this.index);
+        }
+      }
+
+      oPrevPage.onclick = function(){
+        var oNowPage = document.getElementsByClassName('focus')[0];
+        var iNowPage = oNowPage.index;
+
+        if (iNowPage == 0) {
+          oPrevPage.style.display = 'none';
+          return;
+        } else if (iNowPage > 9){
+          for (var i = 0; i < aSpan.length; i++) {
+            aSpan[i].innerHTML = parseInt(aSpan[i].innerHTML) - 1;
+
+            aSpan[i].index = aSpan[i].index - 1;
+          }
+        }
+
+        if (iNowPage > 0) {
+          oNowPage.className = 'none';
+          if (iNowPage-1 < 10) {
+            aSpan[iNowPage-1].className = 'focus';
+          } else {
+            aSpan[9].className = 'focus';
+          }
+        }
+
+        loadBookData(iNowPage-1);
+      }
+
+      oNextPage.onclick = function(){
+        var oNowPage = document.getElementsByClassName('focus')[0];
+        var iNowPage = oNowPage.index;
+
+        oPrevPage.style.display = 'inline-block';
+
+        if (iNowPage >= 9) {
+
+          for (var i = 0; i < aSpan.length; i++) {
+            aSpan[i].innerHTML = parseInt(aSpan[i].innerHTML) + 1;
+
+            aSpan[i].index = aSpan[i].index + 1;
+          }
+
+        }
+
+        if (iNowPage < 9) {
+          oNowPage.className = 'none';
+          aSpan[iNowPage+1].className = 'focus';
+        }
+
+        loadBookData(iNowPage+1);
+      }
+
+      oPage.style.display = 'block';
+
+    };
+
+    /**
+     * [loadBookData description]
+     * @param  {[type]} iNowPage 当前页
+     * @param  {[type]} offset   每页显示的条数
+     * @return {[type]}          [description]
+     */
+    function loadBookData(iNowPage, offset){
+      var offset = offset || 20;
+      var oQ = document.getElementById('q');
+
+      loadData({
+        url: 'http://api.douban.com/book/subjects',
+        params: 'q=' + oQ.value + '&alt=xd&callback=fn1&start-index=' + iNowPage * offset + '&max-results=' + offset
+      });
+    }
+    /**
+     * [loadData description]
+     * * @param  {[type]} obj [description]
+     * @param  {[type]} obj.url   [description]
+     * @param  {[type]} obj.params [description]
+     * @return {[type]}       [description]
+     */
+    function loadData(obj){
+      var oScript = document.createElement('script');
+      oScript.src = obj.url + '?' + obj.params;
+      document.body.appendChild(oScript);
+      document.body.removeChild(oScript);
+      document.documentElement.scrollTop = 0;
+    }
+
+    window.onload = function(){
+      var oQ = document.getElementById('q');
+      var oBtn = document.getElementById('btn');
+      var oGoTop = document.getElementById('goTop');
+
+      oBtn.onclick = function(){
+        if (oQ.value != '') {
+          loadBookData(0);
+        }
+      };
+      // http://api.douban.com/book/subjects?q=' + oQ.value + '&alt=xd&callback=fn1&start-index=（当前页*每页显示的条数）&max-results=10（每页显示的条数）
+      // start-index起始元素
+      // max-results返回结果的数量
+
+      oGoTop.onclick = function () {
+        document.documentElement.scrollTop = 0;
+      }
+
+      window.onscroll = function(){
+        if (document.documentElement.scrollTop) {
+          oGoTop.style.display = 'block';
+        } else {
+          oGoTop.style.display = 'none';
+        }
+      }
+
+    }
+  </script>
+</body>
+</html>

@@ -32,7 +32,14 @@
     function ajax(obj){
       obj.method = obj.method || 'get';
 
-      var xhr = new XMLHttpRequest;
+      var xhr = null;
+
+      try {
+        xhr = new XMLHttpRequst();
+      } catch (e) {
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+      }
+
       if(obj.method == 'get' && obj.data){
         obj.url = obj.url + '?' + obj.data;
       }
@@ -60,34 +67,78 @@
       var oUl = document.getElementById('ul1');
       var aLi = document.getElementsByTagName('li');
       var iLen = aLi.length;
+      var iPage = 1;
+      var allowLoading = true;
 
-      ajax({
-        url: '../model/getPics.php',
-        data: 'cpage=1',
-        success: function(data){
-          data = JSON.parse(data);
+      getList();
+      function getList () {
+        ajax({
+          url: '../model/getPics.php',
+          data: 'cpage=' + iPage,
+          success: function(data){
+            // data = JSON.parse(data);
+            if (!data.length) {
+              return;
+            }
 
-          for(var i = 0; i < data.length; i++){
-            // 获取高度最短的li
-            var _index = getShort();
+            for(var i = 0; i < data.length; i++){
+              // 获取高度最短的li
+              var _index = getShort();
 
-            var oDiv = document.createElement('div');
-            var oImg = document.createElement('img');
-            oImg.src = data[i].preview;
-            // 图片加载较慢，image高度没有被撑开，可能会使div高度计算不准
-            // 可以使用递归，利用image对象的onload事件进行图片预加载（onload事件触发的时机是图片加载完毕的时候，在这个事件里面去获取的图片的高度）
-            // 这里给图片加上宽高度实现，需要后端传图片的宽高值
-            oImg.style.width = '225px';
-            oImg.style.height = data[i].height * (225 / data[i].width) + 'px';
-            oDiv.appendChild(oImg);
-            var oP = document.createElement('p');
-            oP.innerHTML = data[i].title;
-            oDiv.appendChild(oImg);
+              var oDiv = document.createElement('div');
+              var oImg = document.createElement('img');
+              oImg.src = data[i].preview;
+              // 图片加载较慢，image高度没有被撑开，可能会使div高度计算不准
+              // 可以使用递归，利用image对象的onload事件进行图片预加载（onload事件触发的时机是图片加载完毕的时候，在这个事件里面去获取的图片的高度）
+              // 这里给图片加上宽高度实现，需要后端传图片的宽高值
+              oImg.style.width = '225px';
+              oImg.style.height = data[i].height * (225 / data[i].width) + 'px';
+              oDiv.appendChild(oImg);
+              var oP = document.createElement('p');
+              oP.innerHTML = data[i].title;
+              oDiv.appendChild(oP);
 
-            aLi[_index].appendChild(oDiv);
+              aLi[_index].appendChild(oDiv);
+            }
+            allowLoading = true;
+          }
+        });
+      }
+
+      window.onscroll = function () {
+        var _index = getShort();
+        var oLi = aLi[_index];
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+        if (getTop(oLi) + oLi.offsetHeight < document.documentElement.clientHeight + scrollTop) {
+          if (allowLoading) {
+            allowLoading = false;
+            iPage++;
+            getList();
           }
         }
-      });
+      }
+
+      // 获取元素到可视区顶部的距离
+      function getTop (obj) {
+        var iTop = 0;
+
+        /*
+        此处while 循环的目的是为了获取元素 到可视区顶部的距离,
+        使用了offsetTop
+        是获取的到定位父级的距离
+        但是如果定位父级还不是可视区
+        那么需要在加上定位父级到它的定位父级的距离
+        相当于需要一直往外层加
+        直到定位父级不存在为止
+         */
+        while (obj) {
+          iTop += obj.offsetTop;
+          obj = obj.offsetParent;
+        }
+
+        return iTop;
+      }
 
       // 获取高度最短的li
       function getShort () {

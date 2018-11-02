@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AJAX - 百度下拉提示实例</title>
+  <style>
+    #q{width: 300px;height: 30px;padding: 5px;border: 1px solid #f90;font-size: 16px;}
+    #ul1{width: 310px;margin: 0;padding: 0;border: 1px solid #f90;display: none;}
+    li a{display: block;padding: 5px;line-height: 30px;text-decoration: none;}
+    li a:hover{background: #f90;color: #fff;}
+  </style>
+</head>
+<body>
+  <input type="text" id="q" autocomplete="off">
+  <ul id="ul1"></ul>
+  <script>
+    function test(data){
+      var oUl = document.getElementById('ul1');
+      var html = '';
+
+      if (data.s.length) {
+        oUl.style.display = 'block';
+        for (var i = 0; i < data.s.length; i++) {
+          html += '<li><a target="_blank" href="http://www.baidu.com/s?wd=' + data.s[i] + '">' + data.s[i] + '</a></li>';
+        }
+        oUl.innerHTML = html;
+      }
+    }
+    window.onload = function(){
+      var oQ = document.getElementById('q');
+      var oUl = document.getElementById('ul1');
+
+      oQ.onkeyup = function(){
+        if (this.value != '') {
+          var oScript = document.createElement('script');
+          oScript.src = 'http://suggestion.baidu.com/su?wd=' + this.value + '&cb=test';
+          document.body.appendChild(oScript);
+          document.body.removeChild(oScript);
+        } else {
+          oUl.style.display = 'none';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
