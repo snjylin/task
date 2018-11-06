@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>正则表达式 - 敏感词过滤</title>
+</head>
+<body>
+  替换前<br>
+  <textarea style="width:300px;height:100px;">北京已于10月30日正式入冬 周四夜间再迎冷空气</textarea><br>
+  替换后<br>
+  <textarea style="width:300px;height:100px;"></textarea><br>
+  <input type="button" value="确定" id="input1">
+  <script>
+    window.onload = function(){
+      var aTextarea = document.getElementsByTagName('textarea');
+      var oBtn = document.getElementById('input1');
+
+      var re = /正式|空气/g;
+
+      oBtn.onclick = function(){
+
+        aTextarea[1].value = aTextarea[0].value.replace(re, function(str){// 函数的第一个参数就是匹配成功的字符
+          
+          var result = '';
+
+          for (var i = 0; i < str.length; i++) {
+            result += '*';
+          }
+
+          return result;
+
+        });
+
+      };
+    }
+  </script>
+</body>
+</html>
