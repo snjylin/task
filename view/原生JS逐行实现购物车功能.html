@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>原生JS逐行实现购物车功能</title>
+  <script>
+    /*
+     功能分析
+     - 列表
+         -勾选商品
+         -数量控制
+         -小计
+     - 统计
+         -全选
+         -勾选商品件数统计
+         -总额计算
+         -现在结算的点击
+     */
+  </script>
+  <style>
+    body,div,ul,p{margin:0;padding:0;}
+    ul{list-style:none;}
+    input{margin: 0;}
+
+    .shoplist-wrapper{width: 900px;margin: 20px auto;}
+    .shoplist-wrapper>.title{padding: 0 20px;line-height: 40px;font-size: 20px;background: #eee;}
+    [class*=goods-]{display: inline-block;text-align: center;font-size: 16px;}
+    .goods-info{width: 460px;text-align: left;}
+    .goods-price{width: 120px;}
+    .goods-num{width: 120px;}
+    .goods-subtotal{width: 80px;}
+    .goods-operator{width: 80px;}
+    .thead{padding: 0 20px;background: #f8f8f8;font-size: 0;}
+    .shoplist{background: #eee;}
+    .item{position: relative;height: 60px;padding: 20px;border-bottom: 3px solid #fff;font-size: 0;}
+    .item input[type=checkbox]{position: absolute;top: 44px;}
+    .item .goods-info .pic{position: absolute;margin: 0 20px;width: 100px; height: 60px;text-align: center;}
+    .item .goods-info .pic img{max-width: 100%; max-height: 100%;}
+    .item .goods-info .title{margin-left: 140px;height: 40px;line-height: 20px;overflow: hidden;word-break: break-word;}
+    .item .goods-info .spec{margin-left: 140px;color: #999;font-size: 12px;}
+    .item .val-top{line-height: 60px;vertical-align: top;}
+    .item .goods-num{font-size: 0;}
+    .item .goods-num .down-item,.item .goods-num .up-item{display: inline-block;width: 20px;height: 20px;line-height: 20px;border-radius: 50%;background: -webkit-linear-gradient(top,#fff,#bbb);font-size: 12px;vertical-align: middle;cursor: pointer;user-select: none;}
+    .item .goods-num .num{width: 20px;margin: 0 15px;vertical-align: middle;}
+    .item .goods-num .disabled{cursor: not-allowed;color: #999;}
+    .account{position: relative;padding: 20px;background: #ddd;min-height: 40px;}
+    .account input{margin-right: 10px;}
+    .account .total-num{display: inline-block;position: absolute;right: 280px;}
+    .account .total-price{display: inline-block;position: absolute;right: 120px;width: 140px;}
+    .account p{font-size: 14px;color: #666;}
+    .account strong{color: #333;}
+    .account .btn{position: absolute;right: 20px;top: 25px;width: 80px;height: 30px;line-height: 30px;border-radius: 6px;background: -webkit-linear-gradient(top, #f63, #ff3636);color: #fff;text-align: center;cursor: pointer;}
+  </style>
+</head>
+<body>
+  <div id="doc">
+    <div class="shoplist-wrapper">
+      <div class="title">购物清单</div>
+      <div class="thead">
+        <span class="goods-info">商品信息</span>
+        <span class="goods-price">单价</span>
+        <span class="goods-num">数量</span>
+        <span class="goods-subtotal">小计</span>
+        <span class="goods-operator">操作</span>
+      </div>
+      <ul class="shoplist">
+        <li class="item">
+          <input type="checkbox">
+          <div class="goods-info">
+            <div class="pic"><img src="http://imgservice3.suning.cn/uimg1/b2c/image/ED01rkEPoueUvCBVZVMMtQ==.jpg" alt=""></div>
+            <div class="title">金士顿（Kingston）64GB 新款TF卡 MicroSD 读80MB/s CLASS 10手机内存存储卡</div>
+            <span class="spec">规格</span>
+          </div>
+          <div class="goods-price val-top">¥ 69.6</div>
+          <div class="goods-num val-top">
+            <span class="down-item">-</span>
+            <input type="text" class="num" value="1">
+            <span class="up-item">+</span>
+          </div>
+          <div class="goods-subtotal val-top">6</div>
+          <div class="goods-operator val-top">xxx</div>
+        </li>
+        <li class="item">
+          <input type="checkbox">
+          <div class="goods-info">
+            <div class="pic"><img src="http://imgservice3.suning.cn/uimg1/b2c/image/ED01rkEPoueUvCBVZVMMtQ==.jpg" alt=""></div>
+            <div class="title">金士顿（Kingston）64GB 新款TF卡 MicroSD 读80MB/s CLASS 10手机内存存储卡</div>
+            <span class="spec">规格</span>
+          </div>
+          <div class="goods-price val-top">¥ 34.5</div>
+          <div class="goods-num val-top">
+            <span class="down-item">-</span>
+            <input type="text" class="num" value="1">
+            <span class="up-item">+</span>
+          </div>
+          <div class="goods-subtotal val-top">6</div>
+          <div class="goods-operator val-top">xxx</div>
+        </li>
+
+        <li class="item">
+          <input type="checkbox">
+          <div class="goods-info">
+            <div class="pic"><img src="http://imgservice3.suning.cn/uimg1/b2c/image/ED01rkEPoueUvCBVZVMMtQ==.jpg" alt=""></div>
+            <div class="title">金士顿（Kingston）64GB 新款TF卡 MicroSD 读80MB/s CLASS 10手机内存存储卡</div>
+            <span class="spec">规格</span>
+          </div>
+          <div class="goods-price val-top">¥ 34.5</div>
+          <div class="goods-num val-top">
+            <span class="down-item">-</span>
+            <input type="text" class="num" value="1">
+            <span class="up-item">+</span>
+          </div>
+          <div class="goods-subtotal val-top">6</div>
+          <div class="goods-operator val-top">xxx</div>
+        </li>
+      </ul>
+      <div class="account">
+        <input type="checkbox">全选
+        <div class="total-num">
+          <p><strong>已选择 <span>0</span> 件商品</strong></p>
+          <p>共计 <span>0</span> 件商品</p>
+        </div>
+        <div class="total-price">
+          <p><strong>应付总额：¥ <span>0</span></strong></p>
+          <p>应付总额不含运费</p>
+        </div>
+        <div class="btn">现在结算</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var checkbox = document.querySelectorAll('.item [type=checkbox]');
+    var checkedAll = document.querySelector('.account [type=checkbox]');
+    var num = document.querySelectorAll('.item .num');
+    var ups = document.querySelectorAll('.item .up-item');
+    var downs = document.querySelectorAll('.item .down-item');
+    var price = document.querySelectorAll('.item .goods-price');
+    var subtotal = document.querySelectorAll('.item .goods-subtotal');
+    var totalnum = document.querySelectorAll('.total-num span');
+    var totalprice = document.querySelector('.total-price span');
+    var len = checkbox.length;
+
+    for (var i = 0; i < len; i++) {
+      checkbox[i].ischecked = false;
+      ups[i].index = i;
+      downs[i].index = i;
+
+      checkbox[i].onclick = function(){
+        this.ischecked = !this.ischecked;
+
+        for (var j = 0; j < len; j++){
+          if (!checkbox[j].ischecked) {
+            break;
+          }
+        }
+
+        if (j == len) {
+          checkedAll.checked = true;
+        } else {
+          checkedAll.checked = false;
+        }
+        calcFn();
+      }
+
+      checkedAll.onclick = function(){
+        if (this.checked) {
+          for (var i = 0; i < len; i++){
+            checkbox[i].ischecked = true;
+            checkbox[i].checked = true;
+          }
+        } else {
+          for (var i = 0; i < len; i++){
+            checkbox[i].ischecked = false;
+            checkbox[i].checked = false;
+          }
+        }
+        calcFn();
+      }
+
+      ups[i].onclick = function(){
+        downs[this.index].classList.remove('disabled');
+        if (num[this.index].value < 10) {
+          num[this.index].value++;
+          calcFn();
+        } else {
+          this.classList.add('disabled');
+        }
+        subtotal[this.index].innerHTML = (price[this.index].innerHTML.slice(1) * num[this.index].value).toFixed(2);
+      };
+
+      downs[i].onclick = function(){
+        ups[this.index].classList.remove('disabled');
+        if (num[this.index].value > 1) {
+          num[this.index].value--;
+          calcFn();
+        } else {
+          this.classList.add('disabled');
+        }
+        subtotal[this.index].innerHTML = (price[this.index].innerHTML.slice(1) * num[this.index].value).toFixed(2);
+      };
+
+      subtotal[i].innerHTML = (price[i].innerHTML.slice(1) * num[i].value).toFixed(2);
+      calcFn();
+    }
+
+    function calcFn(){
+      var total_num_0 = 0,
+          total_num_1 = 0,
+          total_price = 0;
+      for (var i = 0; i < len; i++){
+        total_num_1 += Number(num[i].value);
+        if (checkbox[i].ischecked) {
+          total_num_0 += Number(num[i].value);
+          total_price += Number(price[i].innerHTML.slice(1)) * Number(num[i].value);
+        }
+      }
+      totalnum[0].innerHTML = total_num_0;
+      totalnum[1].innerHTML = total_num_1;
+      totalprice.innerHTML = total_price.toFixed(2);
+    }
+  </script>
+</body>
+</html>
