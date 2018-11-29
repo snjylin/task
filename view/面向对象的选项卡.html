@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>面向对象的选项卡</title>
+  <style>
+    #table1 div,#table2 div{width: 200px;height: 200px; border: 1px solid #000;display: none;}
+    .active{background: #ff3636;outline: none;}
+  </style>
+</head>
+<body>
+  <div id="doc">
+    <div id="table1">
+      <input type="button" value="tab1">
+      <input type="button" value="tab2">
+      <input type="button" value="tab3">
+      <div style="display: block;">0001</div>
+      <div>0002</div>
+      <div>0003</div>
+    </div>
+    <div id="table2">
+      <input type="button" value="tab1">
+      <input type="button" value="tab2">
+      <input type="button" value="tab3">
+      <div style="display: block;">0001</div>
+      <div>0002</div>
+      <div>0003</div>
+    </div>
+  </div>
+  <script>
+    // window.onload = function(){
+    //   var oTable1 = document.getElementById('table1');
+    //   var aBtn = oTable1.getElementsByTagName('input');
+    //   var aTab = oTable1.getElementsByTagName('div');
+    //
+    //   for (var i = 0; i < aBtn.length; i++) {
+    //     aBtn[i].index = i;
+    //     aBtn[i].onclick = function(){
+    //       for (var i = 0; i < aBtn.length; i++) {
+    //         aBtn[i].className = '';
+    //         aTab[i].style.display = 'none';
+    //       }
+    //       this.className = 'active';
+    //       aTab[this.index].style.display = 'block';
+    //     }
+    //   }
+    // }
+
+    /**
+     * 普通方法变型
+       尽量不要出现函数嵌套函数
+       可以有全局变量
+       把onload中不是赋值的语句放到单独函数中
+     */
+    // var oTable1 = null;
+    // var aBtn = null;
+    // var aTab = null;
+    //
+    // window.onload = function(){
+    //   oTable1 = document.getElementById('table1');
+    //   aBtn = oTable1.getElementsByTagName('input');
+    //   aTab = oTable1.getElementsByTagName('div');
+    //   init();
+    // }
+    // function init(){
+    //   for (var i = 0; i < aBtn.length; i++) {
+    //     aBtn[i].index = i;
+    //     aBtn[i].onclick = changeTab;
+    //   }
+    // }
+    // function changeTab(){
+    //   for (var i = 0; i < aBtn.length; i++) {
+    //     aBtn[i].className = '';
+    //     aTab[i].style.display = 'none';
+    //   }
+    //   this.className = 'active';
+    //   aTab[this.index].style.display = 'block';
+    // }
+
+    /**
+     * 改成面向对象
+       全局变量就是属性
+       函数就是方法
+       Onload中创建对象
+       改this指向问题：事件或者定时器中容易出问题，尽量让面向对象中的this指向对象
+     */
+     window.onload = function(){
+       var tab1 = new Tab('table1');
+       tab1.init();
+
+       var tab2 = new Tab('table2');
+       tab2.init();
+       tab2.autoPlay();
+     }
+     function Tab(id){
+       this.oTable1 = document.getElementById(id);
+       this.aBtn = this.oTable1.getElementsByTagName('input');
+       this.aTab = this.oTable1.getElementsByTagName('div');
+       this.iNow = 0;
+     }
+     Tab.prototype.init = function(){
+       var This = this;
+       for (var i = 0; i < this.aBtn.length; i++) {
+         this.aBtn[i].index = i;
+         this.aBtn[i].onclick = function(){
+           This.changeTab(this);
+         };
+       }
+     }
+     Tab.prototype.changeTab = function(obj){
+       for (var i = 0; i < this.aBtn.length; i++) {
+         this.aBtn[i].className = '';
+         this.aTab[i].style.display = 'none';
+       }
+       obj.className = 'active';
+       this.aTab[obj.index].style.display = 'block';
+     }
+     Tab.prototype.autoPlay = function(){
+       var This = this;
+       setInterval(function(){
+         if (This.iNow == This.aBtn.length-1) {
+           This.iNow = 0;
+         }else{
+           This.iNow++;
+         }
+         for (var i = 0; i < This.aBtn.length; i++) {
+           This.aBtn[i].className = '';
+           This.aTab[i].style.display = 'none';
+         }
+         This.aBtn[This.iNow].className = 'active';
+         This.aTab[This.iNow].style.display = 'block';
+       }, 2000);
+     }
+  </script>
+</body>
+</html>
