@@ -31,6 +31,12 @@
           borderColor: 'blue',
           top: '30px',
           left: '30px'
+        },
+        toDown: function(){
+          document.title = '按下';
+        },
+        toUp: function(){
+          document.title = '抬起';
         }
       });
     }
@@ -54,12 +60,15 @@
       this.obj.onmousedown = function(e){
         var e = e || window.event;
         This.fnDown(e);
+        This.opt.toDown && This.opt.toDown();
         document.onmousemove = function(e){
           var e = e || window.event;
           This.fnMove(e);
+          This.opt.toMove && This.opt.toMove();
         }
         document.onmouseup = function(){
           This.fnUp();
+          This.opt.toUp && This.opt.toUp();
         }
         return false;
       }
