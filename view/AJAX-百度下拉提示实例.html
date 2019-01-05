@@ -35,7 +35,7 @@
       oQ.onkeyup = function(){
         if (this.value != '') {
           var oScript = document.createElement('script');
-          oScript.src = 'http://suggestion.baidu.com/su?wd=' + this.value + '&cb=test';
+          oScript.src = '//suggestion.baidu.com/su?wd=' + this.value + '&cb=test';
           document.body.appendChild(oScript);
           document.body.removeChild(oScript);
         } else {
