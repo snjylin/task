@@ -169,7 +169,7 @@
       var oQ = document.getElementById('q');
 
       loadData({
-        url: 'http://api.douban.com/book/subjects',
+        url: '//api.douban.com/book/subjects',
         params: 'q=' + oQ.value + '&alt=xd&callback=fn1&start-index=' + iNowPage * offset + '&max-results=' + offset
       });
     }
