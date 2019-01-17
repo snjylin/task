@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container{position: relative;margin: auto;width: 100px;height: 100px;}
+    .box{position: absolute;width: 100%;height: 100%;transform-style: preserve-3d;transform-origin: 100%;animation: circle 10s linear infinite;}
+    figure{position: absolute;width: 100%;height: 100%;font-size: 20px; line-height: 100px;color: #fff;text-align: center;}
+    figure:nth-child(1){background-color: hsla(0, 100%, 50%, 0.5);transform: translateZ(-86.6px);}
+    figure:nth-child(2){background-color: hsla(45, 100%, 50%, 0.5);transform: rotateY(60deg) translateZ(-86.6px);}
+    figure:nth-child(3){background-color: hsla(90, 100%, 50%, 0.5);transform: rotateY(120deg) translateZ(-86.6px);}
+    figure:nth-child(4){background-color: hsla(135, 100%, 50%, 0.5);transform: rotateY(180deg) translateZ(-86.6px);}
+    figure:nth-child(5){background-color: hsla(180, 100%, 50%, 0.5);transform: rotateY(240deg) translateZ(-86.6px);}
+    figure:nth-child(6){background-color: hsla(225, 100%, 50%, 0.5);transform: rotateY(300deg) translateZ(-86.6px);}
+    figure:nth-child(7){height: 173.2px;line-height: 173.2px;background-color: hsla(270, 100%, 50%, 0.5);transform: rotateX(90deg) translateZ(86.6px);}
+    figure:nth-child(8){height: 173.2px;line-height: 173.2px;background-color: hsla(315, 100%, 50%, 0.5);transform: rotateX(-90deg) translateZ(13.4px);}
+    figure:nth-child(7):before{content: '';display: block;border-width: 86.6px 50px 86.6px 0;border-style: solid;border-color: transparent hsla(270, 100%, 50%, 0.5) transparent transparent;position: absolute;left: -50px;top: 0;}
+    figure:nth-child(7):after{content: '';display: block;border-width: 86.6px 0 86.6px 50px;border-style: solid;border-color: transparent transparent transparent hsla(270, 100%, 50%, 0.5);position: absolute;right: -50px;top: 0;}
+    figure:nth-child(8):before{content: '';display: block;border-width: 86.6px 50px 86.6px 0;border-style: solid;border-color: transparent hsla(315, 100%, 50%, 0.5) transparent transparent;position: absolute;left: -50px;top: 0;}
+    figure:nth-child(8):after{content: '';display: block;border-width: 86.6px 0 86.6px 50px;border-style: solid;border-color: transparent transparent transparent hsla(315, 100%, 50%, 0.5);position: absolute;right: -50px;top: 0;}
+    @keyframes circle{
+      0%{transform: translateY(200px) rotateX(-20deg) rotateY(0);}
+      100%{transform: translateY(200px) rotateX(-20deg) rotateY(360deg);}
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+    <div class="box">
+      <figure>1</figure>
+      <figure>2</figure>
+      <figure>3</figure>
+      <figure>4</figure>
+      <figure>5</figure>
+      <figure>6</figure>
+      <figure>7</figure>
+      <figure>8</figure>
+    </div>
+  </section>
+</body>
+</html>
