@@ -6,19 +6,86 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style media="screen">
-    
+    :root{
+      --color-blue: #1e7db9;
+      --color-green: #64c878;
+      --color-yellow: #d2a000;
+      --color-red: #b42323;
+      --color-dark: #333;
+      --color-light: #dce1e6;
+      --color-default: #1e7db9;
+      --color-gradient-blue: #37a0e1;
+      --color-gradient-green: #82dc96;
+      --color-gradient-yellow: #ffc300;
+      --color-gradient-red: #d73737;
+      --color-gradient-dark: #555;
+      --color-gradient-light: #f0f0f5;
+      --color-gradient-default: #37a0e1;
+    }
+    .btn{
+      position: relative;
+      width: 9.9em;
+      height: 2.7em;
+      border: 1px solid var(--color-default);
+      border-radius: .25em;
+      box-shadow: 0 0 7px rgba(255,255,255, 1), 0 0 7px rgba(255,255,255,.5) inset;
+      line-height: 2.7em;
+      background: linear-gradient(to top, transparent, var(--color-gradient-default)), var(--color-default);
+      font-familay: "Trebuchet MS", arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-shadow: -.5px .87px 1px rgba(0, 0, 0, .4);
+      color: #fff;
+      text-indent: 1.5em;
+      user-select: none;
+      cursor: pointer;
+    }
+    .btn-blue{border-color: var(--color-blue);background: linear-gradient(to top, transparent, var(--color-gradient-blue)), var(--color-blue);}
+    .btn-green{border-color: var(--color-green);background: linear-gradient(to top, transparent, var(--color-gradient-green)), var(--color-green);}
+    .btn-yellow{border-color: var(--color-yellow);background: linear-gradient(to top, transparent, var(--color-gradient-yellow)), var(--color-yellow);}
+    .btn-red{border-color: var(--color-red);background: linear-gradient(to top, transparent, var(--color-gradient-red)), var(--color-red);}
+    .btn-dark{border-color: var(--color-dark);background: linear-gradient(to top, transparent, var(--color-gradient-dark)), var(--color-dark);}
+    .btn-light{border-color: var(--color-light);background: linear-gradient(to top, transparent, var(--color-gradient-light)), var(--color-light);}
+    .btn.btn-download-1:before{
+      content: '>';
+      display: block;
+      width: 8px;
+      height: 8px;
+      transform: rotate(90deg) scale(.6,1);
+      position: absolute;
+      top: 14px;
+      right: -4px;
+      font-size: 1.2em;
+      text-indent: 0;
+      text-shadow: .87px -.5px 1px rgba(0, 0, 0, .4);
+    }
+    .btn.btn-download-1:after{
+      content: '';
+      display: block;
+      width: 1.4em;
+      height: 1.4em;
+      border-radius: 50%;
+      /* background: linear-gradient(to top, rgba(255, 255, 255, .25) 100%, rgba(170, 170, 170, .25) 80%, transparent 0%); */
+      background: radial-gradient(transparent 0%, rgba(170, 170, 170, .25) 60%, rgba(255, 255, 255, .25) 80%);
+      box-shadow: .5px .87px 1px rgba(0, 0, 0, .4) inset;
+      position: absolute;
+      top: .6em;
+      right: .4em;
+    }
   </style>
 </head>
 <body>
-  <div class="btn001">001</div>
-  <div class="btn002">002</div>
-  <div class="btn003">003</div>
-  <div class="btn004">004</div>
-  <div class="btn005">005</div>
-  <div class="btn006">006</div>
-  <div class="btn007">007</div>
-  <div class="btn008">008</div>
-  <div class="btn009">009</div>
-  <div class="btn010">010</div>
+  <!-- <div class="btn">BUY NOW</div> -->
+  <div class="btn btn-download-1">DOWNLOAD</div>
+  <!-- <div class="btn btn-download-2">DOWNLOAD</div> -->
+  <!-- <div class="btn btn-signup">SIGN UP</div>
+  <div class="btn btn-learnmore">LEARN MORE</div>
+  <div class="btn btn-goback">GO BACK</div>
+  <div class="btn btn-blue">BUY NOW</div>
+  <div class="btn btn-green">BUY NOW</div>
+  <div class="btn btn-yellow">BUY NOW</div>
+  <div class="btn btn-red">BUY NOW</div>
+  <div class="btn btn-dark">BUY NOW</div>
+  <div class="btn btn-light">BUY NOW</div> -->
 </body>
 </html>
