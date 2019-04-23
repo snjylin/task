@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>interview</title>
+  <style media="screen">
+    html *{
+      margin:0;
+      padding:0;
+    }
+    .layout{
+      margin-top: 20px;
+    }
+    .layout article div{
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <section class="layout float">
+    1）浮动
+    <style media="screen">
+      .layout.float .left{
+        float: left;
+        width: 300px;
+        background: red;
+      }
+      .layout.float .right{
+        float: right;
+        width: 300px;
+        background: blue;
+      }
+      .layout.float .center{
+        background: yellow;
+      }
+    </style>
+    <article class="left-right-center">
+      <div class="left"></div>
+      <div class="right"></div>
+      <div class="center">
+        <h1>浮动解决方案</h1>
+        1.这是三栏布局浮动中间部分
+        2.这是三栏布局浮动中间部分
+      </div>
+    </article>
+  </section>
+
+  <section class="layout absolute">
+    2）绝对定位
+    <style media="screen">
+      .layout.absolute .left-center-right>div{
+        position: absolute;
+      }
+      .layout.absolute .left{
+        left: 0;
+        width: 300px;
+        background: red;
+      }
+      .layout.absolute .center{
+        left: 300px;
+        right: 300px;
+        background: yellow;
+      }
+      .layout.absolute .right{
+        right: 0;
+        width: 300px;
+        background: blue;
+      }
+    </style>
+    <article class="left-center-right">
+      <div class="left"></div>
+      <div class="center">
+        <h2>绝对定位解决方案</h2>
+        1.这是三栏布局绝对定位中间部分
+        2.这是三栏布局绝对定位中间部分
+      </div>
+      <div class="right"></div>
+    </article>
+  </section>
+
+  <section class="layout flexbox">
+    3)flexbox
+    <style media="screen">
+      .layout.flexbox{
+        margin-top: 120px;
+      }
+      .layout.flexbox .left-center-right{
+        display: flex;
+      }
+      .layout.flexbox .left{
+        width: 300px;
+        background: red;
+      }
+      .layout.flexbox .center{
+        flex: 1;
+        background: yellow;
+      }
+      .layout.flexbox .right{
+        width: 300px;
+        background: blue;
+      }
+    </style>
+    <article class="left-center-right">
+      <div class="left"></div>
+      <div class="center">
+        <h2>flexbox解决方案</h2>
+        1.这是三栏布局flexbox中间部分
+        2.这是三栏布局flexbox中间部分
+      </div>
+      <div class="right"></div>
+    </article>
+  </section>
+
+  <section class="layout table">
+    4）表格布局
+    <style media="screen">
+      .layout.table .left-center-right{
+        width: 100%;
+        display: table;
+        height: 100px;
+      }
+      .layout.table .left-center-right>div{
+        display: table-cell;
+      }
+      .layout.table .left{
+        width: 300px;
+        background: red;
+      }
+      .layout.table .center{
+        background: yellow;
+      }
+      .layout.table .right{
+        width: 300px;
+        background: blue;
+      }
+    </style>
+    <article class="left-center-right">
+      <div class="left"></div>
+      <div class="center">
+        <h2>表格布局解决方案</h2>
+        1.这是三栏布局表格布局中间部分
+        2.这是三栏布局表格布局中间部分
+      </div>
+      <div class="right"></div>
+    </article>
+  </section>
+</body>
+</html>
