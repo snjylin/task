@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue入门</title>
+  <!-- 使用script标签引入vue.js最好放在head里，不要放在body里，避免出现抖屏的情况 -->
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    {{msg}}
+    <p>
+      {{ msg1 }}
+    </p>
+  </div>
+  <div id="test">
+    <div v-for="item in list"
+         v-show="item.age > 29"
+         :class="['active','add','more',{'another': item.age > 29}]"
+         :style="StyleMsg">
+      {{ item.name }}
+    </div>
+  </div>
+  <script>
+    new Vue({
+      el: '#test',
+      data: {
+        list: [{
+          name: '小明',
+          age: 28
+        },{
+          name: '小强',
+          age: 30
+        }],
+        StyleMsg: {
+          color: '#f00',
+          textShadow: '0 0 5px green'
+        }
+      },
+    });
+    var arr = 'new test'
+    var app = new Vue({
+      el: '#root',
+      data: {
+        msg: 'Hello Vue!',
+        another: 'another Hello vue!'
+      },
+      watch: {
+        msg: function(newval, oldval){
+          console.log('newval is:'+newval);
+          console.log('oldval is:'+oldval);
+        },
+        msg1: function(newval, oldval){
+          console.log('newval is:'+newval);
+          console.log('oldval is:'+oldval);
+        }
+      },
+      computed: {
+        msg1: function(){
+          return 'computed:' + this.msg + ',' + this.another + arr
+        }
+      }
+    });
+  </script>
+</body>
+</html>

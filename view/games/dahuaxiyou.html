@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body,ul,div,input,button,td {margin: 0;padding: 0;}
+    #bd {width: 70%;margin: 50px auto;padding-bottom: 50px;background: url(./bg_icon.jpg);}
+    h1{color: #ffdead;text-align: center;}
+    ul {list-style: none;font-size: 0;}
+    .title{line-height: 50px;text-align: center;font-size: 32px;background: #8b4726;color: #fff;}
+    .title.cur {background: #ee9a00;}
+    li {width: 50%;display: inline-block;cursor: pointer;}
+    .banner {width: 90%;margin: auto;text-align: right;height: 100px;}
+    .opt{float: right;position: relative;margin-top: 30px;}
+    .opt input{width: 300px;border: 1px solid #ee9a00;line-height: 30px;outline: none;background: transparent;text-indent: 24px;color: #fff;}
+    .opt input::placeholder{color: #aaa;}
+    .opt::before{content: '';display: inline-block;width: 14px;height: 14px;background: url(./search_icon.png) no-repeat;background-size: 14px;position: absolute;top: 10px;left: 6px;}
+    .opt .reset {display: inline-block;padding: 0 5px;border: none;line-height: 30px;background: #ee9a00;color: #fff;font-size: 20px;cursor: pointer;}
+    table{width: 90%;margin: auto;}
+    table .th{line-height: 46px;text-align: center;font-size: 28px;background: #ee9a00;color: #fff;}
+    table td{padding: 0 10px;line-height: 40px;font-size: 14px;}
+    tr>*:first-child{width: 66%;}
+    tr:nth-child(2n+1){background: #ebe0ce;}
+    tr:nth-child(2n){background: #dfc39c;}
+    tr>*:nth-child(2n){border-left: 1px solid #f0f0f0}
+  </style>
+</head>
+<body>
+  <div id="bd">
+    <h1>大话西游答题器</h1>
+    <ul>
+      <li class="title cur">科举答题器</li>
+      <li class="title">大理寺答题器</li>
+    </ul>
+    <div class="banner">
+      <div class="opt">
+        <input type="text" placeholder="输入关键词搜索">
+        <span class="reset">重置</span>
+      </div>
+    </div>
+    <table cellspacing="0">
+      <thead>
+        <tr>
+          <th class="th">题目</th>
+          <th class="th">答案</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="display:none;">题目1</td>
+          <td style="display:none;">答案1</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script src="./../../js/lib/jquery-1.8.3.min.js"></script>
+  <script src="./dahuaxiyou_data.js"></script>
+  <script src="./dahuaxiyou.js"></script>
+</body>
+</html>
