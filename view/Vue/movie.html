@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>视频解析</title>
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <div id="Movie">
+    <input type="text" name="" value="" placeholder="请输入视频URL" v-model="movieURL" @click="electValue($event)">
+    <br>
+    <button type="button" name="button" @click="toWatch()">观看</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#Movie',
+      data () {
+        return {
+          url: 'http://api.51ckm.com/Box.php?url=',
+          movieURL: ''
+        }
+      },
+      methods: {
+        electValue (e) {
+          console.log(e);
+          e.currentTarget.select();
+        },
+        toWatch () {
+          let reg = /https?:\/\/.*?/g;
+          console.log(this.url+this.movieURL);
+          if (reg.test(this.movieURL)) {
+            window.open(this.url+this.movieURL);
+          }
+        }
+      }
+    });
+  </script>
+
+  <style lang="css" scoped>
+  </style>
+</body>
+</html>
