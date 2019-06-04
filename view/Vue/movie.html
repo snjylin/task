@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>视频解析</title>
+  <!-- 使用script标签引入vue.js最好放在head里，不要放在body里，避免出现抖屏的情况 -->
   <script src="./vue.js"></script>
 </head>
 <body>
@@ -17,11 +18,9 @@
   <script>
     new Vue({
       el: '#Movie',
-      data () {
-        return {
-          url: 'http://api.51ckm.com/Box.php?url=',
-          movieURL: ''
-        }
+      data: {
+        url: 'http://api.51ckm.com/Box.php?url=',
+        movieURL: ''
       },
       methods: {
         electValue (e) {
@@ -38,8 +37,5 @@
       }
     });
   </script>
-
-  <style lang="css" scoped>
-  </style>
 </body>
 </html>
