@@ -7,10 +7,14 @@
   <title>视频解析</title>
   <!-- 使用script标签引入vue.js最好放在head里，不要放在body里，避免出现抖屏的情况 -->
   <script src="./vue.js"></script>
+  <style>
+    #Movie{width: 100%;height: 100%;}
+  </style>
 </head>
 <body>
   <div id="Movie">
-    <iframe src="" width="100%" height="100%" id="iframe" v-show="isShow"></iframe>
+    <iframe src="" width="100%" height="480px" id="iframe" v-show="isShow"></iframe>
+    <br>
     <input type="text" name="" value="" placeholder="请输入视频URL" v-model="movieURL" @click="electValue($event)">
     <br>
     <button
@@ -31,7 +35,6 @@
           'https://api.927.la/vip/?url=',
           'https://api.927.la/927/?url=',
           'https://api.927.la/ck/?url=',
-          'https://api.bbbbbb.me/jx/?url=',
           'https://beaacc.com/api.php?url=',
           'https://206dy.com/vip.php?url=',
           'https://jx.618g.com/?url=',
@@ -50,10 +53,10 @@
           let reg = /https?:\/\/.*?/g;
           console.log(url+this.movieURL);
           if (reg.test(this.movieURL)) {
-            // this.isShow = true;
+            this.isShow = true;
             console.log(this.isShow);
-            window.open(url+this.movieURL);
-            // document.getElementsByTagName('iframe')[0].src = url+this.movieURL
+            // window.open(url+this.movieURL);
+            document.getElementsByTagName('iframe')[0].src = url+this.movieURL
           } else {
             alert('请输入正确的地址！');
           }
