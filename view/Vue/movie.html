@@ -10,16 +10,35 @@
 </head>
 <body>
   <div id="Movie">
+    <iframe src="" width="100%" height="100%" id="iframe" v-show="isShow"></iframe>
     <input type="text" name="" value="" placeholder="请输入视频URL" v-model="movieURL" @click="electValue($event)">
     <br>
-    <button type="button" name="button" @click="toWatch()">观看</button>
+    <button
+      type="button"
+      name="button"
+      @click="toWatch(item)"
+      v-for="(item,index) in urlList"
+      :key="index">线路{{index}}</button>
   </div>
 
   <script>
     new Vue({
       el: '#Movie',
       data: {
-        url: 'http://api.51ckm.com/Box.php?url=',
+        isShow: false,
+        urlList: [
+          'http://api.51ckm.com/Box.php?url=',
+          'https://api.927.la/vip/?url=',
+          'https://api.927.la/927/?url=',
+          'https://api.927.la/ck/?url=',
+          'https://api.bbbbbb.me/jx/?url=',
+          'https://beaacc.com/api.php?url=',
+          'https://206dy.com/vip.php?url=',
+          'https://jx.618g.com/?url=',
+          'http://api.51ckm.com/Box.php?url=',
+          'https://www.3aym.cn/?url=',
+          'http://17kyun.com/api.php?url=',
+        ],
         movieURL: ''
       },
       methods: {
@@ -27,11 +46,16 @@
           console.log(e);
           e.currentTarget.select();
         },
-        toWatch () {
+        toWatch (url) {
           let reg = /https?:\/\/.*?/g;
-          console.log(this.url+this.movieURL);
+          console.log(url+this.movieURL);
           if (reg.test(this.movieURL)) {
-            window.open(this.url+this.movieURL);
+            // this.isShow = true;
+            console.log(this.isShow);
+            window.open(url+this.movieURL);
+            // document.getElementsByTagName('iframe')[0].src = url+this.movieURL
+          } else {
+            alert('请输入正确的地址！');
           }
         }
       }
