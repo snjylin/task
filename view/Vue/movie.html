@@ -53,10 +53,10 @@
           let reg = /https?:\/\/.*?/g;
           console.log(url+this.movieURL);
           if (reg.test(this.movieURL)) {
-            this.isShow = true;
+            // this.isShow = true;
             console.log(this.isShow);
-            // window.open(url+this.movieURL);
-            document.getElementsByTagName('iframe')[0].src = url+this.movieURL
+            window.open(url+this.movieURL);
+            // document.getElementsByTagName('iframe')[0].src = url+this.movieURL
           } else {
             alert('请输入正确的地址！');
           }
